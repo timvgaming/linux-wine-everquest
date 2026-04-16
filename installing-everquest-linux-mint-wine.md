@@ -121,7 +121,7 @@ No standalone driver installation commands or version pinning are required for t
 Before installing or upgrading Wine, perform a version check: 
 
 ```bash
-wine ==version
+wine --version
 ```
 
 - If the reported version is Wine 9.x or newer, no action is required — proceed directly to **C) winetricks**. 
