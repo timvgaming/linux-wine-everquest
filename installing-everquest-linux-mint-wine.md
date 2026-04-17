@@ -351,7 +351,7 @@ mkdir -p ~/Games/EQAscendant/eq1/drive_c/Program\ Files/eq1
 2. Copy the game files
 
 ```bash
-cp -a ~/Games/EQAscendant/EQ-game-files/ ~/Games/EQAscendant/eq1/drive_c/Program\ Files/eq1/
+cp -a ~/Games/EQAscendant/EQ-game-files/. ~/Games/EQAscendant/eq1/drive_c/Program\ Files/eq1/
 ```
 
  **Verify the file copy paste succeeded:** Confirm the copy completed without errors. Browse to ~/Games/EQAscendant/eq1/drive_c/Program\ Files/eq1/ using your file manager or terminal. Confirm the destination contains many files and subdirectories.
