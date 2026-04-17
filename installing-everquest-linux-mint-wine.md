@@ -164,7 +164,7 @@ wine --version
 **C) winetricks:** Before installing winetricks, perform a version check: 
 
 ```bash
-winetricks --version
+winetricks --version 2>/dev/null | cut -d' ' -f1
 ```
 
 - If the command prints any version string, winetricks is already installed — proceed directly to **D) DXVK**. 
@@ -182,7 +182,7 @@ sudo apt install winetricks
 apt will install the distro‑provided stable package. Verify: winetricks --version
 
 ```bash
-winetricks --version
+winetricks --version 2>/dev/null | cut -d' ' -f1
 ```
 
 **D) DXVK:** DXVK is installed per‑Wine prefix, not system‑wide. It will be installed as part of the EverQuest build procedures. 
