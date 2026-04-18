@@ -6,7 +6,7 @@
 
 
 
-## \## <a id="toc"></a>Table of Contents
+<h2 id="toc">Table of Contents</h2>
 
 \- [Introduction](#installing-everquest-in-linux-wine)
 
