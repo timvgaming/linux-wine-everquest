@@ -136,8 +136,6 @@ some cryptic terminal command -r whodat reXing my system
 
 Pasting into your terminal may not be as intuitive. 1) Clicking anywhere in terminal, then pressing Ctrl+Shift+V should paste the clipboard contents into terminal, or 2) Clicking the Right mouse button anywhere in terminal should display a context menu that includes a paste option. Both options will paste the clipboard contents at the command prompt, and then you just press Enter. 
 
-⚠️**Note:** IIRC, the terminal may not support pasting from clipboard by default. In which case you'll need to ask your favorite AI how to enable pasting to terminal for your distro.
-
 #### On to the Host-level software stack one time Installation procedures: 
 
 **A)  GPU driver:** No standalone driver installation commands or version pinning are required for this guide. Use your distro Driver Manager to select and maintain your GPU driver.
@@ -164,7 +162,7 @@ wine --version
   - If a package providing Wine 9.x or newer is available, install it.
   - **If** the available packages do not provide Wine 9.x or newer, install via the Fallback option shown below.:
 
-**Fallback (APT):** Use only if directed by the previous step.
+**Fallback (APT):** ⚠️ Use only if directed by the previous step.
 
 
 ```bash
@@ -193,7 +191,7 @@ winetricks --version 2>/dev/null | cut -d' ' -f1
   - Install the available package. 
   - **If** no package is available, install via the Fallback below. 
 
-**Fallback (APT):** Use only if directed by the previous step.
+**Fallback (APT):** ⚠️ Use only if directed by the previous step.
 
 ```bash
 sudo apt update
@@ -300,17 +298,18 @@ mkdir -p ~/Games/EQAscendant/EQ-game-files
 
   - Any other data directories present in the RoF client
 
+
 - Do **not** attempt to launch EverQuest from the destination directory. 
 
 3. Using your distro file manager, copy **all files and subdirectories** from the unzipped EQAscendant patcher into the destination directory. 
 
--  **Important**: If your file manager prompts you to choose an action for existing files (for example, Replace, Overwrite, or Merge), choose the option that replaces existing files. The patcher is expected to overwrite some files shipped with the base client. 
+-  ⚠️ **Important**: If your file manager prompts you to choose an action for existing files (for example, Replace, Overwrite, or Merge), choose the option that replaces existing files. The patcher is expected to overwrite some files shipped with the base client. 
 
-- ❌ **What not to do:**
+-  ❌ **What not to do:**
 
-- Do not mix files from different EverQuest eras 
-- Do not create any eqN Wine prefixes yet 
-- Do not run the patcher or the game from EQ-game-files
+-  Do not mix files from different EverQuest eras 
+-  Do not create any eqN Wine prefixes yet 
+-  Do not run the patcher or the game from EQ-game-files
 
 At the end of this step, EQ-game-files/ should contain a complete EverQuest client plus the EQAscendant patcher, ready to be copied into Wine prefixes. 
 
@@ -328,11 +327,12 @@ Height=768
 WindowedWidth=1366
 WindowedHeight=768
 [Defaults]
-Gamma=5
+WindowedMode=True
+Gamma=4
 EOF
 ```
 
-- Additional settings are intentionally omitted. EverQuest will populate defaults and user preferences automatically on first launch. A low initial gamma (such as Gamma=5, approximately 21% in‑game) mitigates display gamma bleed into the desktop environment under Wine while still providing a comfortable baseline. You can fine‑tune gamma and dimensions later using the in‑game and winecfg options. 
+- Additional settings are intentionally omitted. EverQuest will populate defaults and user preferences automatically on first launch. A low initial gamma (such as Gamma=4, approximately 15% in‑game) mitigates display gamma bleed into the desktop environment under Wine while still providing a comfortable baseline. You can fine‑tune gamma and dimensions later using the in‑game and winecfg options. 
 
 - This creates a clean, deterministic baseline for the initial launch. No further editing is required at this stage. At this point, the EQ-game-files/ folder contains a clean, reproducible EverQuest + EQAscendant baseline. 
 
@@ -406,13 +406,13 @@ WINEPREFIX=~/Games/EQAscendant/eq1 winecfg
 
 - This containment step prevents full screen rendering during DirectX initialization and avoids display mode switching while EverQuest establishes its video state.  
 
-8. Install wine-mono: **(eq1 x 1)**
+8. Install wine-mono: **(eq1 x 1)** Wine-Mono is Wine’s open-source replacement for Microsoft’s .NET Framework. The EQAscendant patcher is a .NET application.
 
 ```bash
 WINEPREFIX=~/Games/EQAscendant/eq1 wine msiexec /i ~/Downloads/wine-mono-11.0.0-x86.msi
 ```
 
-- Wine Mono is Wine’s open-source replacement for Microsoft’s .NET Framework. The EQAscendant patcher is a .NET application.
+- Success is indicated by the wine desktop being visible for a few seconds and terminal returning to the command prompt.
 
 9. Launch the EQAscendant patcher, which will in turn launch EverQuest:
 
@@ -440,9 +440,12 @@ WINEPREFIX=~/Games/EQAscendant/eq1 wine EQAscendant.exe
   - click **Patch**
 
 
-- After the patcher finishes patching, EverQuest will launch (**the success signal for this step**).
+- After the patcher finishes patching, EverQuest will launch inside the Wine 1366×768 virtual desktop. (**the success signal for this step**).
   -  Note: Always launch EverQuest via the EQAscendant patcher. 
 - Login to the Ascendant server
+
+  - To speed server login along, when the SOE splash screen pops, **click** it to move to the login screen. If you don't "click", the splash screen remains in place for 30 seconds before progressing to login.
+
 - Create a test character if you don't already have a character
 - Enter world, and look around
 - OK, that's enough. Log out and close the game completely.
@@ -507,6 +510,123 @@ cp ~/.local/share/applications/EQAscendant-eq1.desktop ~/Desktop/EQAscendant-eq1
 
 **\END REPEATABLE PREFIX INSTALLATION PROCESS**
 
+
+
+- Enable Wine Virtual Desktop: Open Wine configuration for this prefix: **(eq1 x 1)**
+
+```bash
+WINEPREFIX=~/Games/EQAscendant/eq1 winecfg
+```
+
+- When the Wine configuration window opens **(success signal for this operation)**, make only the following changes:
+
+- Graphics tab: 
+  - Enable: ✅ Emulate a virtual desktop
+  - Set the desktop size to 1366×768
+  - Ensure all other boxes are unchecked
+  - Click **Apply**, then **OK**. 
+- The wine configuration window will close.
+
+1. Open eqclient and edit the video settings:
+
+- Open with nano (default terminal based text editor for most distro)
+
+```bash
+nano ~/Games/EQAscendant/eq1/drive_c/Program\ Files/eq1/eqclient.ini
+```
+
+- or open with kate (editor similar to notepad/notepad++) install with: sudo apt install kate
+
+```bash
+kate ~/Games/EQAscendant/eq1/drive_c/Program\ Files/eq1/eqclient.ini
+```
+
+- 
+
+### Suggested Wine Virtual Desktop and EverQuest Window Resolutions
+
+When using Wine’s virtual desktop and running EverQuest in windowed mode, it is often helpful to choose resolutions that are *smaller than your native monitor resolution*. This improves usability when boxing, reduces GPU overhead, and avoids UI scaling issues.
+
+The table below lists common monitor resolutions and several descending, practical window sizes that work well for Wine virtual desktops and EverQuest client windows.
+
+These are *recommendations*, not requirements. Feel free to experiment once your setup is stable. They key to choosing a EQ resolution and a matching Wine desktop resolution is to initially set both to large, or to your Monitors Native resolution, and then in-game set display video modes to various options and find one you're satisfied with. Note that the Wine desktop will not resize based on your in-game selection. 
+
+| Your Monitor (Native) | Large     | Medium (Good Default) | Small (Boxing‑Friendly) | Very Small (Utility/Box) |
+| --------------------- | --------- | --------------------- | ----------------------- | ------------------------ |
+| 3840×2160 (4K)        | 2560×1440 | 1920×1080             | 1600×900                | 1280×720                 |
+| 2560×1440 (1440p)     | 1920×1080 | 1600×900              | 1366×768                | 1280×720                 |
+| 1920×1080 (1080p)     | 1600×900  | 1366×768              | 1280×720                | 1024×768                 |
+| 1680×1050             | 1440×900  | 1280×800              | 1280×720                | 1024×768                 |
+| 1366×768              | 1280×720  | 1024×768              | 1024×600                | 800×600                  |
+
+Guidance:
+
+- Use a medium resolution for your first successful launch.
+- Use smaller resolutions when running multiple clients simultaneously.
+- EverQuest’s UI scales better when resolutions follow standard 16:9 or 16:10 ratios.
+- You can use *different resolutions per client* when boxing.
+
+Wine’s virtual desktop only constrains window boundaries — it does *not* affect in‑game gamma behavior, input handling, or rendering quality.
+
+```bash##### 
+# Edit eq1's eqclient.ini [VideoMode] dimensions (preserves rest of file)
+# Set these:
+X=1600
+Y=900
+
+INI="$HOME/Games/EQAscendant/eq1/drive_c/Program Files/eq1/eqclient.ini"
+
+# Safety backup
+cp -a "$INI" "$INI.bak.$(date +%Y%m%d-%H%M%S)"
+
+awk -v x="$X" -v y="$Y" '
+BEGIN {
+  in_vm = 0
+  saw_w = saw_h = saw_ww = saw_wh = 0
+}
+# Detect section headers
+/^\[VideoMode\][[:space:]]*$/ {
+  in_vm = 1
+  print
+  next
+}
+/^\[[^]]+\][[:space:]]*$/ {
+  # Leaving [VideoMode]: if we did not see keys, add them before next section
+  if (in_vm) {
+    if (!saw_w)  print "Width=" x
+    if (!saw_h)  print "Height=" y
+    if (!saw_ww) print "WindowedWidth=" x
+    if (!saw_wh) print "WindowedHeight=" y
+  }
+  in_vm = 0
+  print
+  next
+}
+
+# While inside [VideoMode], replace or mark keys
+in_vm && $0 ~ /^Width=/         { print "Width=" x;         saw_w=1;  next }
+in_vm && $0 ~ /^Height=/        { print "Height=" y;        saw_h=1;  next }
+in_vm && $0 ~ /^WindowedWidth=/ { print "WindowedWidth=" x; saw_ww=1; next }
+in_vm && $0 ~ /^WindowedHeight=/{ print "WindowedHeight=" y;saw_wh=1; next }
+
+# Otherwise, pass through unchanged
+{ print }
+
+END {
+  # If file ended while still in [VideoMode], append missing keys at EOF
+  if (in_vm) {
+    if (!saw_w)  print "Width=" x
+    if (!saw_h)  print "Height=" y
+    if (!saw_ww) print "WindowedWidth=" x
+    if (!saw_wh) print "WindowedHeight=" y
+  }
+}
+' "$INI" > "$INI.tmp" && mv "$INI.tmp" "$INI"
+
+echo "Updated: $INI"
+echo "Backup:  $(ls -1t "$INI".bak.* | head -n 1)"
+```
+
 ### Defining the repeatable process
 
 You may have noticed that just above most of the code blocks in the repeatable process is the notation **(eq1 x N)** This is how many times that eq1 appears in the ensuing code block. To create additional eq prefixes (eq2 for example) you need to edit the existing eq1 to eq2 before you run the code. There are a couple of ways to do this:
@@ -538,63 +658,72 @@ mkdir -p ~/Games/EQAscendant/eq2
 WINEPREFIX=~/Games/EQAscendant/eq2 winecfg
 ```
 
-Accept prompts to install Wine Mono and/or Wine Gecko if offered. Wine may print warnings, noise or what even looks like errors while it's running — this is normal. When the Wine configuration window opens **(success signal for this operation)**, make only the following changes:
+- Accept prompts to install Wine Mono and/or Wine Gecko if offered. Wine may print warnings, noise or what even looks like errors while it's running — this is normal. The Wine configuration window should open **(success signal for this step)**.
+
+3. In the Wine configuration window make these changes:
 
 - Graphics tab: 
   - uncheck everything. 
   - Click **Apply**, then **OK**. 
 - The wine configuration window will close.
 
-3. Install DXVK into the eq2 prefix: 
+4. Install DXVK into the eq2 prefix: 
 
 ```bash
 WINEPREFIX=~/Games/EQAscendant/eq2 winetricks dxvk
 ```
 
-4. Copy the EverQuest and patcher files into the eq2 prefix 
+- Non‑fatal warnings or fixme messages are expected as long as the command completes and returns terminal to the command prompt. **(success signal for this operation)**
 
-- Create the EverQuest install directory inside the prefix:
+5. Create the EverQuest install directory inside the prefix:
 
 ```bash
 mkdir -p ~/Games/EQAscendant/eq2/drive_c/Program\ Files/eq2
 ```
 
-- Copy the game and patcher files:
+6. Copy the EverQuest and patcher files into the prefix:
 
 ```bash
 cp -a ~/Games/EQAscendant/EQ-game-files/. ~/Games/EQAscendant/eq2/drive_c/Program\ Files/eq2/
 ```
 
-5. Enable Wine Virtual Desktop: Open Wine configuration for this prefix:
+- **Verify the file copy & paste succeeded:** Confirm the copy completed without errors. Browse to ~/Games/EQAscendant/eq1/drive_c/Program\ Files/eq1/ using your file manager or terminal. Confirm the destination contains many files and subdirectories.
+
+7. In this Step, we explicitly finalize first‑launch display containment before starting the game. This ensures a predictable, non‑disruptive first run. 
+
+- Enable Wine Virtual Desktop: Open Wine configuration for this prefix:
 
 ```bash
 WINEPREFIX=~/Games/EQAscendant/eq2 winecfg
 ```
 
 - When the Wine configuration window opens **(success signal for this operation)**, make only the following changes:
-
 - Graphics tab: 
-  - Enable: Emulate a virtual desktop
+  - Enable: ✅ Emulate a virtual desktop
   - Set the desktop size to 1366×768
   - Ensure all other boxes are unchecked
   - Click **Apply**, then **OK**. 
 - The wine configuration window will close.
 
-6. Install wine-mono
+- This containment step prevents full screen rendering during DirectX initialization and avoids display mode switching while EverQuest establishes its video state.  
+
+8. Install wine-mono: Wine-Mono is Wine’s open-source replacement for Microsoft’s .NET Framework. The EQAscendant patcher is a .NET application.
 
 ```bash
 WINEPREFIX=~/Games/EQAscendant/eq2 wine msiexec /i ~/Downloads/wine-mono-11.0.0-x86.msi
 ```
 
-7. Launch the EQAscendant patcher, which will in turn launch EverQuest:
+- Success is indicated by the wine desktop being visible for a few seconds and terminal returning to the command prompt.
 
-- Change to the EverQuest install directory:
+9. Launch the EQAscendant patcher, which will in turn launch EverQuest:
+
+- In terminal, cd to the EverQuest install directory: 
 
 ```bash
 cd ~/Games/EQAscendant/eq2/drive_c/Program\ Files/eq2
 ```
 
-- Launch the EQAscendant patcher:
+- Launch the EQAscendant patcher: 
 
 ```bash
 WINEPREFIX=~/Games/EQAscendant/eq2 wine EQAscendant.exe
@@ -612,8 +741,21 @@ WINEPREFIX=~/Games/EQAscendant/eq2 wine EQAscendant.exe
   - click **Patch**
 
 - After the patcher finishes patching, EverQuest will launch (**the success signal for this step**).
+  -  Note: Always launch EverQuest via the EQAscendant patcher. 
 
-8. Create the applications directory (if it doesn’t already exist) .
+- Login to the Ascendant server
+
+  - To speed server login along, when the SOE splash screen pops, **click** it to move to the login screen. If you don't "click", the splash screen remains in place for 30 seconds before progressing to login.
+- Create a test character if you don't already have a character
+- Enter world, and look around
+- OK, that's enough. Log out and close the game completely.
+- ⚠️ Note that terminal is not presenting a command prompt. 
+  - Click in terminal and press Ctrl+C to end the running process
+  - You should now have a command prompt
+
+10. Create a desktop launcher:
+
+- Create the applications directory (if it doesn’t already exist).
 
 ```bash
 mkdir -p ~/.local/share/applications
@@ -684,63 +826,72 @@ mkdir -p ~/Games/EQAscendant/eq3
 WINEPREFIX=~/Games/EQAscendant/eq3 winecfg
 ```
 
-Accept prompts to install Wine Mono and/or Wine Gecko if offered. Wine may print warnings, noise or what even looks like errors while it's running — this is normal. When the Wine configuration window opens **(success signal for this operation)**, make only the following changes:
+- Accept prompts to install Wine Mono and/or Wine Gecko if offered. Wine may print warnings, noise or what even looks like errors while it's running — this is normal. The Wine configuration window should open **(success signal for this step)**.
+
+3. In the Wine configuration window make these changes:
 
 - Graphics tab: 
   - uncheck everything. 
   - Click **Apply**, then **OK**. 
 - The wine configuration window will close.
 
-3. Install DXVK into the eq2 prefix: 
+4. Install DXVK into the prefix: 
 
 ```bash
 WINEPREFIX=~/Games/EQAscendant/eq3 winetricks dxvk
 ```
 
-4. Copy the EverQuest and patcher files into the eq2 prefix 
+- Non‑fatal warnings or fixme messages are expected as long as the command completes and returns terminal to the command prompt. **(success signal for this operation)**
 
-- Create the EverQuest install directory inside the prefix:
+5. Create the EverQuest install directory inside the prefix:
 
 ```bash
 mkdir -p ~/Games/EQAscendant/eq3/drive_c/Program\ Files/eq3
 ```
 
-- Copy the game and patcher files:
+6. Copy the EverQuest and patcher files into the prefix:
 
 ```bash
 cp -a ~/Games/EQAscendant/EQ-game-files/. ~/Games/EQAscendant/eq3/drive_c/Program\ Files/eq3/
 ```
 
-5. Enable Wine Virtual Desktop: Open Wine configuration for this prefix:
+- **Verify the file copy & paste succeeded:** Confirm the copy completed without errors. Browse to ~/Games/EQAscendant/eq1/drive_c/Program\ Files/eq1/ using your file manager or terminal. Confirm the destination contains many files and subdirectories.
+
+7. In this Step, we explicitly finalize first‑launch display containment before starting the game. This ensures a predictable, non‑disruptive first run. 
+
+- Enable Wine Virtual Desktop: Open Wine configuration for this prefix:
 
 ```bash
 WINEPREFIX=~/Games/EQAscendant/eq3 winecfg
 ```
 
 - When the Wine configuration window opens **(success signal for this operation)**, make only the following changes:
-
 - Graphics tab: 
-  - Enable: Emulate a virtual desktop
+  - Enable: ✅ Emulate a virtual desktop
   - Set the desktop size to 1366×768
   - Ensure all other boxes are unchecked
   - Click **Apply**, then **OK**. 
 - The wine configuration window will close.
 
-6. Install wine-mono
+- This containment step prevents full screen rendering during DirectX initialization and avoids display mode switching while EverQuest establishes its video state.  
+
+8. Install wine-mono: Wine-Mono is Wine’s open-source replacement for Microsoft’s .NET Framework. The EQAscendant patcher is a .NET application.
 
 ```bash
 WINEPREFIX=~/Games/EQAscendant/eq3 wine msiexec /i ~/Downloads/wine-mono-11.0.0-x86.msi
 ```
 
-7. Launch the EQAscendant patcher, which will in turn launch EverQuest:
+- Success is indicated by the wine desktop being visible for a few seconds and terminal returning to the command prompt.
 
-- Change to the EverQuest install directory:
+9. Launch the EQAscendant patcher, which will in turn launch EverQuest:
+
+- In terminal, cd to the EverQuest install directory: 
 
 ```bash
 cd ~/Games/EQAscendant/eq3/drive_c/Program\ Files/eq3
 ```
 
-- Launch the EQAscendant patcher:
+- Launch the EQAscendant patcher: 
 
 ```bash
 WINEPREFIX=~/Games/EQAscendant/eq3 wine EQAscendant.exe
@@ -758,8 +909,21 @@ WINEPREFIX=~/Games/EQAscendant/eq3 wine EQAscendant.exe
   - click **Patch**
 
 - After the patcher finishes patching, EverQuest will launch (**the success signal for this step**).
+  -  Note: Always launch EverQuest via the EQAscendant patcher. 
 
-8. Create the applications directory (if it doesn’t already exist) .
+- Login to the Ascendant server
+
+  - To speed server login along, when the SOE splash screen pops, **click** it to move to the login screen. If you don't "click", the splash screen remains in place for 30 seconds before progressing to login.
+- Create a test character if you don't already have a character
+- Enter world, and look around
+- OK, that's enough. Log out and close the game completely.
+- ⚠️ Note that terminal is not presenting a command prompt. 
+  - Click in terminal and press Ctrl+C to end the running process
+  - You should now have a command prompt
+
+10. Create a desktop launcher:
+
+- Create the applications directory (if it doesn’t already exist).
 
 ```bash
 mkdir -p ~/.local/share/applications
@@ -774,7 +938,7 @@ mkdir -p ~/.local/share/icons
 - Copy the patcher icon to  ~/.local/share/icons.
 
 ```bash
-sudo cp ~/Games/EQAscendant/eq3/drive_c/Program\ Files/eq3/eqemupatcher.png ~/.local/share/icons/eqascendant-eq3.png
+sudo cp ~/Games/EQAscendant/eq2/drive_c/Program\ Files/eq2/eqemupatcher.png ~/.local/share/icons/eqascendant-eq2.png
 ```
 
 - Create the launcher .desktop file:
@@ -812,7 +976,7 @@ cp ~/.local/share/applications/EQAscendant-eq3.desktop ~/Desktop/EQAscendant-eq3
 
 - This places a clickable EverQuest launcher directly on your desktop. 
 
-**END eq3 PREFIX INSTALLATION PROCESS**
+1. **END eq3 PREFIX INSTALLATION PROCESS**
 
 #############################################################################
 
@@ -830,63 +994,72 @@ mkdir -p ~/Games/EQAscendant/eq4
 WINEPREFIX=~/Games/EQAscendant/eq4 winecfg
 ```
 
-Accept prompts to install Wine Mono and/or Wine Gecko if offered. Wine may print warnings, noise or what even looks like errors while it's running — this is normal. When the Wine configuration window opens **(success signal for this operation)**, make only the following changes:
+- Accept prompts to install Wine Mono and/or Wine Gecko if offered. Wine may print warnings, noise or what even looks like errors while it's running — this is normal. The Wine configuration window should open **(success signal for this step)**.
+
+3. In the Wine configuration window make these changes:
 
 - Graphics tab: 
   - uncheck everything. 
   - Click **Apply**, then **OK**. 
 - The wine configuration window will close.
 
-3. Install DXVK into the eq2 prefix: 
+4. Install DXVK into the eq2 prefix: 
 
 ```bash
 WINEPREFIX=~/Games/EQAscendant/eq4 winetricks dxvk
 ```
 
-4. Copy the EverQuest and patcher files into the eq2 prefix 
+- Non‑fatal warnings or fixme messages are expected as long as the command completes and returns terminal to the command prompt. **(success signal for this operation)**
 
-- Create the EverQuest install directory inside the prefix:
+5. Create the EverQuest install directory inside the prefix:
 
 ```bash
 mkdir -p ~/Games/EQAscendant/eq4/drive_c/Program\ Files/eq4
 ```
 
-- Copy the game and patcher files:
+6. Copy the EverQuest and patcher files into the prefix:
 
 ```bash
 cp -a ~/Games/EQAscendant/EQ-game-files/. ~/Games/EQAscendant/eq4/drive_c/Program\ Files/eq4/
 ```
 
-5. Enable Wine Virtual Desktop: Open Wine configuration for this prefix:
+- **Verify the file copy & paste succeeded:** Confirm the copy completed without errors. Browse to ~/Games/EQAscendant/eq1/drive_c/Program\ Files/eq1/ using your file manager or terminal. Confirm the destination contains many files and subdirectories.
+
+7. In this Step, we explicitly finalize first‑launch display containment before starting the game. This ensures a predictable, non‑disruptive first run. 
+
+- Enable Wine Virtual Desktop: Open Wine configuration for this prefix:
 
 ```bash
 WINEPREFIX=~/Games/EQAscendant/eq4 winecfg
 ```
 
 - When the Wine configuration window opens **(success signal for this operation)**, make only the following changes:
-
 - Graphics tab: 
-  - Enable: Emulate a virtual desktop
-  - Set the desktop size to 1366 x 768
+  - Enable: ✅ Emulate a virtual desktop
+  - Set the desktop size to 1366×768
   - Ensure all other boxes are unchecked
   - Click **Apply**, then **OK**. 
 - The wine configuration window will close.
 
-6. Install wine-mono
+- This containment step prevents full screen rendering during DirectX initialization and avoids display mode switching while EverQuest establishes its video state.  
+
+8. Install wine-mono: Wine-Mono is Wine’s open-source replacement for Microsoft’s .NET Framework. The EQAscendant patcher is a .NET application.
 
 ```bash
 WINEPREFIX=~/Games/EQAscendant/eq4 wine msiexec /i ~/Downloads/wine-mono-11.0.0-x86.msi
 ```
 
-7. Launch the EQAscendant patcher, which will in turn launch EverQuest:
+- Success is indicated by the wine desktop being visible for a few seconds and terminal returning to the command prompt.
 
-- Change to the EverQuest install directory:
+9. Launch the EQAscendant patcher, which will in turn launch EverQuest:
+
+- In terminal, cd to the EverQuest install directory: 
 
 ```bash
 cd ~/Games/EQAscendant/eq4/drive_c/Program\ Files/eq4
 ```
 
-- Launch the EQAscendant patcher:
+- Launch the EQAscendant patcher: 
 
 ```bash
 WINEPREFIX=~/Games/EQAscendant/eq4 wine EQAscendant.exe
@@ -904,8 +1077,21 @@ WINEPREFIX=~/Games/EQAscendant/eq4 wine EQAscendant.exe
   - click **Patch**
 
 - After the patcher finishes patching, EverQuest will launch (**the success signal for this step**).
+  -  Note: Always launch EverQuest via the EQAscendant patcher. 
 
-8. Create the applications directory (if it doesn’t already exist) .
+- Login to the Ascendant server
+
+  - To speed server login along, when the SOE splash screen pops, **click** it to move to the login screen. If you don't "click", the splash screen remains in place for 30 seconds before progressing to login.
+- Create a test character if you don't already have a character
+- Enter world, and look around
+- OK, that's enough. Log out and close the game completely.
+- ⚠️ Note that terminal is not presenting a command prompt. 
+  - Click in terminal and press Ctrl+C to end the running process
+  - You should now have a command prompt
+
+10. Create a desktop launcher:
+
+- Create the applications directory (if it doesn’t already exist).
 
 ```bash
 mkdir -p ~/.local/share/applications
@@ -958,7 +1144,7 @@ cp ~/.local/share/applications/EQAscendant-eq4.desktop ~/Desktop/EQAscendant-eq4
 
 - This places a clickable EverQuest launcher directly on your desktop. 
 
-**END eq4 PREFIX INSTALLATION PROCESS**
+1. **END eq4 PREFIX INSTALLATION PROCESS**
 
 #############################################################################
 
@@ -1123,32 +1309,6 @@ The layout, prefix model, and install order are chosen to:
 Once you understand the process, you can deviate safely. Until then, following a single, consistent model produces the best results.
 
 If you ever wonder *why* a step exists, it should now be answerable somewhere in this appendix.
-
-### Suggested Wine Virtual Desktop and EverQuest Window Resolutions
-
-When using Wine’s virtual desktop and running EverQuest in windowed mode, it is often helpful to choose resolutions that are *smaller than your native monitor resolution*. This improves usability when boxing, reduces GPU overhead, and avoids UI scaling issues.
-
-The table below lists common monitor resolutions and several descending, practical window sizes that work well for Wine virtual desktops and EverQuest client windows.
-
-These are *recommendations*, not requirements. Feel free to experiment once your setup is stable.
-
-| Your Monitor (Native) | Large / Single Client | Medium (Good Default) | Small (Boxing‑Friendly) | Very Small (Utility/Box)
-
-| 3840×2160 (4K)    | 2560×1440 | 1920×1080 | 1600×900 | 1280×720 |
-| ----------------- | --------- | --------- | -------- | -------- |
-| 2560×1440 (1440p) | 1920×1080 | 1600×900  | 1366×768 | 1280×720 |
-| 1920×1080 (1080p) | 1600×900  | 1366×768  | 1280×720 | 1024×768 |
-| 1680×1050         | 1440×900  | 1280×800  | 1280×720 | 1024×768 |
-| 1366×768          | 1280×720  | 1024×768  | 1024×600 | 800×600  |
-
-Guidance:
-
-- Use a medium resolution for your first successful launch.
-- Use smaller resolutions when running multiple clients simultaneously.
-- EverQuest’s UI scales better when resolutions follow standard 16:9 or 16:10 ratios.
-- You can use *different resolutions per client* when boxing.
-
-Wine’s virtual desktop only constrains window boundaries — it does *not* affect in‑game gamma behavior, input handling, or rendering quality.
 
 ##### 
 
