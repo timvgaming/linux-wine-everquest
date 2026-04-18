@@ -163,7 +163,7 @@ These components form the baseline environment required to get EverQuest up and 
 
 - Keep your current driver if it is already working well and you are satisfied with it.
 
-**B) Wine: **Wine is the compatibility layer that allows Windows applications to run on Linux.
+**B) Wine:** Wine is the compatibility layer that allows Windows applications to run on Linux.
 
 1) Before installing or upgrading Wine, perform a version check: 
 
