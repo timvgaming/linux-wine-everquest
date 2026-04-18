@@ -2,37 +2,50 @@
 
 ## *EQAscendant Version* 
 
-**Author note & disclaimer:** I (Hrain on EQAscendant Discord) and (timvgaming on GitHub), do not serve in any official capacity with EQAscendant, nor do I speak for the project or its staff. I am simply an EverQuest player who enjoys this server, and is sharing what I’ve learned to help other players. All configuration guidance here reflects personal experience, not official project policy. 
+**Author note & disclaimer:** I (Hrain on EQAscendant Discord) and (timvgaming on GitHub), do not serve in any official capacity with EQAscendant, nor do I speak for the project or its staff. I am simply an EverQuest player who enjoys this server, and is sharing what I’ve learned to help other players. All configuration guidance here reflects personal experience, not official project policy. <span id="toc"></span>
 
-<span id="toc"></span>
+## Table of Contents 
 
-<h2 id="toc">Table of Contents</h2>
-
-
-
-[toc]
-
-
-
-<h2 id="toc">Table of Contents</h2>
-
-\- [Introduction](#installing-everquest-in-linux-wine)
+\- [Document goals](#Document goals)
 
 \- [Technical Notes](#Technical Notes)
 
-\- [Document Goals](#document-goals)
+\- [Installation Overview](#Installation Overview)
 
-\- [Installation Overview](#installation-overview)
+\- [Prerequisites](#Prerequisites)
 
-\- [Prerequisites](#prerequisites)
+\- [How to copy & paste to terminal](#How to copy & paste to terminal)
 
-\- [Install the Supporting Software Stack](#Install the host-level software stack)
+\- [One-time host-level software stack installation](#One-time host-level software stack installation)
 
-\- [Installing EverQuest](#OK! Let’s install a game)
+\- [One-time Wine Prefix Configuration](#One-time Wine Prefix Configuration)
+
+\- [BEGIN REPEATABLE PREFIX INSTALLATION PROCESS](#BEGIN REPEATABLE PREFIX INSTALLATION PROCESS)
+
+​	\- [Create PREFIX eq1](#Create PREFIX eq1)
+
+​	\- [Create PREFIX eq2](#Create PREFIX eq2)
+
+​	\- [Create PREFIX eq3](#Create PREFIX eq3)
+
+​	\- [Create PREFIX eq4](#Create PREFIX eq4)
 
 
 
-## Technical Notes 	
+## Document Goals 
+
+This guide helps you get up and running with one or more EverQuest clients on Linux using Wine, while giving you a practical understanding of the pieces involved so you can scale (for boxing) with confidence. Principle goals are:
+
+- Launch and play EverQuest via the EQAscendant patcher. 
+- Understand Wine prefixes 
+- Apply the minimal Wine configuration needed for correct input and display. 
+- Use DXVK for stable DirectX 9 rendering. 
+- Use wine-mono to provide .NET application support.
+- Create repeatable multi‑instance installs (eq1, eq2, eq3…) without cross‑contamination. 
+
+[ToC](#toc)
+
+## Technical Notes
 
 This guide was explicitly tested on the following system:
 
@@ -54,20 +67,9 @@ Software stack versions as installed during testing:
 
 All required software dependencies are covered by the above software stack installations. Results on other distributions, kernels, desktop environments, driver versions, Wine builds or hardware may vary slightly, but the overall procedure should remain applicable. 
 
-## Document goals 
+[ToC](#toc)
 
-This guide helps you get up and running with one or more EverQuest clients on Linux using Wine, while giving you a practical understanding of the pieces involved so you can scale (for boxing) with confidence. Principle goals are:
-
-- Launch and play EverQuest via the EQAscendant patcher. 
-- Understand Wine prefixes 
-- Apply the minimal Wine configuration needed for correct input and display. 
-- Use DXVK for stable DirectX 9 rendering. 
-- Use wine-mono to provide .NET application support.
-- Create repeatable multi‑instance installs (eq1, eq2, eq3…) without cross‑contamination. 
-
-## Installation overview ## 
-
-[Back to ToC](#toc)
+## Installation Overview ## 
 
 This guide follows a **repeatable, per‑client workflow.** Each EverQuest client is isolated in its own Wine prefix and follows the same setup steps. Nearly all parts of the guides' installation process are executed via your terminal in a **copy** command from guide **& paste** into terminal, and then **press Enter** flow. Successful results of the command execution are predictable and will be shown as part of the guide process in cases where there may be some ambiguity. Procedure flow is as follows:
 
@@ -89,6 +91,8 @@ This guide follows a **repeatable, per‑client workflow.** Each EverQuest clien
 - Launch the EQAscendant patcher & the EverQuest client
 - Create a desktop launcher for the patcher bound to that prefix. 
 - Define a repeatable process for adding additional clients (eq2, eq3, …). 
+
+[ToC](#toc)
 
 ## Prerequisites ##
 
@@ -123,20 +127,9 @@ Before installing any software or creating Wine prefixes, you must already have 
       - You can use any existing accounts that you may have made for other EMUs. They are not EMU exclusive.
       - You will need at least **1 login server account** (❌ not your EQEmulator account) to complete the EQ install below
 
+[ToC](#toc)
 
-## Install the host-level software stack
-
-These components form the baseline environment required to get EverQuest up and running. **Important guardrail (package sources):** Whenever possible, use your distro’s managed packages first (e.g., Linux Mint Software Manager / Driver Manager). Only fall back to command‑line installs (APT) when the software is not available or is materially outdated in the managed repositories. This minimizes dependency conflicts and keeps upgrades clean and supportable. Before configuring a Wine prefix or installing EverQuest, ensure the following **host‑level software** is installed on your system:
-
-**Source order used in this guide:**
-
-1. Distro Software/Driver Manager (preferred) 
-2. Distro APT repositories (fallback) 
-3. Upstream installers (used only when necessary and called out explicitly) 
-
-### Host-level software stack Installation procedures (performed one time): ###
-
-**Using copy & paste to terminal for the fledgling Linux user:**
+## **How to copy & paste to terminal:**
 
 For the new and uninitiated Linux user, that was me a few weeks ago, the prospects of needing to use terminal can be a bit daunting. Rest assured that you are not going to have to learn any commands here, though that could be a nice side benefit of following this guide. Any step requiring the use of terminal (by the way you can open terminal with Ctrl+Alt+T) will be a simple matter of copying the command from the guide and pasting it into terminal and then pressing Enter.
 
@@ -148,7 +141,19 @@ some cryptic terminal command -r whodat reXing my system
 
 Pasting into your terminal may not be as intuitive. 1) Clicking anywhere in terminal, then pressing Ctrl+Shift+V should paste the clipboard contents into terminal, or 2) Clicking the Right mouse button anywhere in terminal should display a context menu that includes a paste option. Both options will paste the clipboard contents at the command prompt, and then you just press Enter. 
 
-#### On to the Host-level software stack one time Installation procedures: 
+[ToC](#toc)
+
+## One-time host-level software stack installation
+
+These components form the baseline environment required to get EverQuest up and running. **Important guardrail (package sources):** Whenever possible, use your distro’s managed packages first (e.g., Linux Mint Software Manager / Driver Manager). Only fall back to command‑line installs (APT) when the software is not available or is materially outdated in the managed repositories. This minimizes dependency conflicts and keeps upgrades clean and supportable. Before configuring a Wine prefix or installing EverQuest, ensure the following **host‑level software** is installed on your system:
+
+**Source order used in this guide:**
+
+1. Distro Software/Driver Manager (preferred) 
+2. Distro APT repositories (fallback) 
+3. Upstream installers (used only when necessary and called out explicitly) 
+
+#### Host-level software stack Installation procedures
 
 **A)  GPU driver:** No standalone driver installation commands or version pinning are required for this guide. Use your distro Driver Manager to select and maintain your GPU driver.
 
@@ -228,7 +233,9 @@ winetricks --version 2>/dev/null | cut -d' ' -f1
 
 - Place wine-mono-11.0.0-x86.msi in your Downloads folder ($HOME/Downloads). 
 
-#### Final one-time configuration stuff  ####
+[ToC](#toc)
+
+## One-time Wine Prefix Configuration  ##
 
 Before running any commands, it’s important to understand exactly how this guide organizes files on disk. The layout below is not only a recommendation — it is the structure this guide **will** use when installing EverQuest on your system if you follow the guide verbatim. Using your own preferred layout is discussed at the bottom of this section.
 
@@ -348,15 +355,17 @@ EOF
 
 - This creates a clean, deterministic baseline for the initial launch. No further editing is required at this stage. At this point, the EQ-game-files/ folder contains a clean, reproducible EverQuest + EQAscendant baseline. 
 
-### Create the first Wine prefix (eq1) 
-
-Everything you did above set the stage and never has to be done again. From here on, we build one EverQuest client at a time, each isolated in its own Wine prefix. The steps that follow focus on layout and prefix creation first, installing the game and patcher into that prefix, verifying a good launch and creating a desktop launcher.  Each EverQuest client lives in its own Wine prefix. Here's the first one!:
+[ToC](#toc)
 
 #############################################################################
 
-###### **BEGIN REPEATABLE PREFIX INSTALLATION PROCESS**
+## **BEGIN REPEATABLE PREFIX INSTALLATION PROCESS**
 
 #############################################################################
+
+Everything you did above set the stage and never has to be done again. From here on, we build one EverQuest client at a time, each isolated in its own Wine prefix. The steps that follow focus on layout and prefix creation first, installing the game and patcher into that prefix, verifying a good launch and creating a desktop launcher.  Each EverQuest client lives in its own Wine prefix. ⚠️ **Here's the first one!**:
+
+### Create PREFIX eq1
 
 - ⚠️ Quick Note: The annotation **(eq1 x N)** is a count of the eq1 occurrences in the code block. More on that later.
 
@@ -553,6 +562,8 @@ cp ~/.local/share/applications/EQAscendant-eq1.desktop ~/Desktop/EQAscendant-eq1
 
 #############################################################################
 
+[ToC](#toc)
+
 - Enable Wine Virtual Desktop: Open Wine configuration for this prefix: **(eq1 x 1)**
 
 ```bash
@@ -685,7 +696,7 @@ You may have noticed that just above most of the code blocks in the repeatable p
 
 ### Cheater!
 
-**BEGIN eq2 PREFIX INSTALLATION PROCESS**
+### Create PREFIX eq2
 
 1. Create the prefix directory: 
 
@@ -851,9 +862,11 @@ cp ~/.local/share/applications/EQAscendant-eq2.desktop ~/Desktop/EQAscendant-eq2
 
 **END eq2 PREFIX INSTALLATION PROCESS**
 
+[ToC](#toc)
+
 #############################################################################
 
-**BEGIN eq3 PREFIX INSTALLATION PROCESS**
+### Create PREFIX eq3
 
 1. Create the prefix directory: 
 
@@ -1019,9 +1032,11 @@ cp ~/.local/share/applications/EQAscendant-eq3.desktop ~/Desktop/EQAscendant-eq3
 
 1. **END eq3 PREFIX INSTALLATION PROCESS**
 
+[ToC](#toc)
+
 #############################################################################
 
-**BEGIN eq4 PREFIX INSTALLATION PROCESS**
+### Create PREFIX eq4
 
 1. Create the prefix directory: 
 
@@ -1186,6 +1201,8 @@ cp ~/.local/share/applications/EQAscendant-eq4.desktop ~/Desktop/EQAscendant-eq4
 - This places a clickable EverQuest launcher directly on your desktop. 
 
 1. **END eq4 PREFIX INSTALLATION PROCESS**
+
+[ToC](#toc)
 
 #############################################################################
 
