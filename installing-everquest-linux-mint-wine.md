@@ -6,7 +6,7 @@
 
 ## Table of Contents
 
-\- [Guide Goals](#goals) 
+\- [Guide Goals](#guidegoals) 
 
 \- [Technical Notes](#technotes) 
 
@@ -32,7 +32,7 @@
 
 ------
 
-<a id="goals"></a>
+<a id="guidegoals"></a>
 
 ## Guide Goals 
 
@@ -1338,7 +1338,7 @@ Why this matters:
 
 In this guide, Wine is the foundation that allows EverQuest and the EQAscendant patcher to run on Linux at all.
 
-Back to [ToC](#toc) or [Guide Goals](#Guide Goals)
+Back to [ToC](#toc) or [Guide Goals](#guidegoals) 
 
 ------
 
@@ -1367,7 +1367,7 @@ Why this guide uses one prefix per EverQuest client:
 
 In short: one prefix = one EverQuest client = predictable behavior.
 
-Back to [ToC](#toc) or [Guide Goals](#Guide Goals)
+Back to [ToC](#toc) or [Guide Goals](#guidegoals) 
 
 ------
 
@@ -1382,7 +1382,7 @@ EverQuest (Rain of Fear era) is a 32‑bit Windows application. Modern Wine inst
 
 You do *not* need a separate 32‑bit Wine installation. The guide assumes a standard modern Wine setup that supports both.
 
-Back to [ToC](#toc) or [Guide Goals](#Guide Goals)
+Back to [ToC](#toc) or [Guide Goals](#guidegoals) 
 
 ------
 
@@ -1406,7 +1406,7 @@ DXVK is installed per Wine prefix, not system-wide. This ensures:
 
 Without DXVK, EverQuest may still launch — but visual glitches, crashes, or erratic fullscreen behavior are far more likely.
 
-Back to [ToC](#toc) or [Guide Goals](#Guide Goals)
+Back to [ToC](#toc) or [Guide Goals](#guidegoals) 
 
 ------
 
@@ -1421,7 +1421,7 @@ DXVK relies on Vulkan as its backend. If Vulkan is working correctly on your sys
 
 Your distribution’s graphics driver packages handle Vulkan support. This guide does not require any manual Vulkan configuration.
 
-Back to [ToC](#toc) or [Guide Goals](#Guide Goals)
+Back to [ToC](#toc) or [Guide Goals](#guidegoals) 
 
 ------
 
@@ -1442,7 +1442,7 @@ Why this guide installs Wine Mono manually:
 
 By installing Wine Mono *before* first launch, the guide ensures deterministic behavior with no reliance on pop-ups or prompts.
 
-Back to [ToC](#toc) or [Guide Goals](#Guide Goals)
+Back to [ToC](#toc) or [Guide Goals](#guidegoals) 
 
 ------
 
@@ -1454,7 +1454,7 @@ EverQuest itself does not depend on Gecko. Some patchers and launchers may.
 
 If Wine prompts to install Gecko during prefix creation, it is safe to allow it. Gecko does not interfere with EQ or DXVK.
 
-Back to [ToC](#toc) or [Guide Goals](#Guide Goals)
+Back to [ToC](#toc) or [Guide Goals](#guidegoals) 
 
 ------
 
@@ -1474,7 +1474,7 @@ Why the guide keeps winetricks usage minimal:
 
 The fewer moving parts inside a prefix, the easier it is to debug and reproduce.
 
-Back to [ToC](#toc) or [Guide Goals](#Guide Goals)
+Back to [ToC](#toc) or [Guide Goals](#guidegoals) 
 
 ------
 
@@ -1519,7 +1519,7 @@ Why it is recommended for first launch:
 
 You can disable the virtual desktop later if you prefer native window management. This author won't take responsibility for any resulting window behavior issues.
 
-Back to [ToC](#toc) or [Guide Goals](#Guide Goals)
+Back to [ToC](#toc) or [Guide Goals](#guidegoals) 
 
 ## ✅ Recommended Display Mode: Fullscreen (Inside the Virtual Desktop)
 
@@ -1548,7 +1548,7 @@ It does **not**:
 - trap your keyboard
 - risk black‑screen failures
 
-Back to [ToC](#toc) or [Guide Goals](#Guide Goals)
+Back to [ToC](#toc) or [Guide Goals](#guidegoals) 
 
 ## 🚫 Avoid Windowed Mode in EverQuest
 
@@ -1570,7 +1570,7 @@ If you need to adjust the size of the game view, use:
 
 Changes made there are preserved cleanly across launches.
 
-Back to [ToC](#toc) or [Guide Goals](#Guide Goals)
+Back to [ToC](#toc) or [Guide Goals](#guidegoals) 
 
 ### 🔁 If You Accidentally Switch to Windowed Mode
 
@@ -1605,7 +1605,7 @@ Breaking any of these rules can lead to instability that is difficult—or impos
 >  **Fullscreen inside the virtual desktop is safe and recommended.**
 >  **Windowed Mode is discouraged due to instability and drag issues.**
 
-Back to [ToC](#toc) or [Guide Goals](#Guide Goals)
+Back to [ToC](#toc) or [Guide Goals](#guidegoals) 
 
 ------
 
@@ -1627,7 +1627,7 @@ This avoids the classic problems seen on both Windows and Wine:
 - Input conflicts
 - Patchers modifying the wrong installation
 
-Back to [ToC](#toc) or [Guide Goals](#Guide Goals)
+Back to [ToC](#toc) or [Guide Goals](#guidegoals) 
 
 ------
 
@@ -1647,5 +1647,5 @@ Once you understand the process, you can deviate safely. Until then, following a
 
 If you ever wonder *why* a step exists, it should now be answerable somewhere in this appendix.
 
-Back to [ToC](#toc) or [Guide Goals](#Guide Goals)
+Back to [ToC](#toc) or [Guide Goals](#guidegoals) 
 
