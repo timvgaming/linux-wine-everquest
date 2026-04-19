@@ -6,44 +6,57 @@
 
 ## Table of Contents
 
-\- [Document goals](#document-goals)
+\- [Guide Goals](#goals) 
 
-\- [Technical Notes](#technical-notes)
+\- [Technical Notes](#technotes) 
 
-\- [Installation Overview](#installation-overview)
+\- [Installation Overview](#overview) 
 
 \- [Prerequisites](#prerequisites)
 
-\- [How to copy & paste to terminal](#how-to-copy--paste-to-terminal)
+\- [How to Copy & Paste to Terminal](#copypaste) 
 
-\- [One-time host-level software stack installation](#one-time-host-level-software-stack-installation)
+\- [One-time Host-level Software Stack Installation](#onetimehost) 
 
-\- [One-time Wine Prefix Configuration](#one-time-wine-prefix-configuration)
+\- [One-time Wine Prefix Configuration](#onetimewine) 
 
-\- [BEGIN REPEATABLE PREFIX INSTALLATION PROCESS](#begin-repeatable-prefix-installation-process)
+\- [Begin Repeatable Prefix Installation Process](#beginrepeat) 
 
-\- [Create PREFIX eq1](#create-prefix-eq1)
+\- [Create Prefix eq1](#prefixeq1) 
 
-\- [Create PREFIX eq2](#create-prefix-eq2)
+\- [Create Prefix eq2](#prefixeq2) 
 
-\- [Create PREFIX eq3](#create-prefix-eq3)
+\- [Create Prefix eq3](#prefixeq3) 
 
-\- [Create PREFIX eq4](#create-prefix-eq4)
+\- [Create Prefix eq4](#prefixeq4) 
 
-\- [Important: Always Run EverQuest Inside the WINE Virtual Desktop](#Important: Always Run EverQuest Inside the WINE Virtual Desktop)
+------
 
-## Document Goals 
+<a id="goals"></a>
 
-This guide helps you get up and running with one or more EverQuest clients on Linux using Wine, while giving you a practical understanding of the pieces involved so you can scale (for boxing) with confidence. Principle goals are:
+## Guide Goals 
 
-- Launch and play EverQuest via the EQAscendant patcher. 
-- Understand Wine prefixes 
+This guide will hopefully get you up and running with one or more EverQuest clients on Linux using Wine, while giving you a practical understanding of the pieces and processes involved. While this guide is specifically constructed and worded to support playing on the EQAscendant EMU server, it will support other EMUs with the differences being the EMU specific EverQuest game files (typically Rain of Fear or Titanium) and the EMU specific patcher files. Both of those are only referenced in one section of the guide and are **user placed** in a specific folder. All terminal commands and processes in the guide are not specific to any particular EMU with the exception of the patcher launch, where it is assumed that your patchername.exe launches EverQuest automatically. If it doesn't do that, then the remainder of the guide won't apply to you. I may append the guide later to support that case. Principle goals with links to any applicable Appendix expanded descriptions are:
+
+- ⚠️ Launch and play EverQuest via the EQAscendant patcher. 
+-  [Wine](#Wine) is a compatibility layer that allows Windows applications to run on Linux.
+- A  [Wine Prefix](#wineprefix) is a self-contained directory that represents a *simulated Windows environment*.
+- Wine’s [Virtual Desktop](#virtdt) option runs Windows applications inside a fixed-size window.
+- Understanding  [32‑bit vs 64‑bit (WoW64)](#wow64)
 - Apply the minimal Wine configuration needed for correct input and display. 
-- Use DXVK for stable DirectX 9 rendering. 
-- Use wine-mono to provide .NET application support.
-- Create repeatable multi‑instance installs (eq1, eq2, eq3…) without cross‑contamination. 
+- [DXVK](#DXVK)  is a translation layer that converts DirectX 9/10/11 calls into Vulkan.
+- [Vulkan](#Vulkan) is a graphics API.
+- [Wine-Mono](#Wine-Mono) provides .NET application support.
+- [Wine-Gecko](#Wine-Gecko) provides Internet Explorer–like HTML rendering.
+- [winetricks](#winetricks) is a helper tool that installs common Windows runtime components.
+- [Boxing](#boxing)  refers to running multiple EverQuest clients simultaneously, and is supported by this guide.
+- Why This Guide Is [Opinionated](#opion)  .
 
 [ToC](#toc)
+
+------
+
+<a id="technotes"></a>
 
 ## Technical Notes
 
@@ -68,6 +81,10 @@ Software stack versions as installed during testing:
 All required software dependencies are covered by the above software stack installations. Results on other distributions, kernels, desktop environments, driver versions, Wine builds or hardware may vary slightly, but the overall procedure should remain applicable. 
 
 [ToC](#toc)
+
+------
+
+<span id="overview"></span>
 
 ## Installation Overview ## 
 
@@ -94,7 +111,18 @@ This guide follows a **repeatable, per‑client workflow.** Each EverQuest clien
 
 [ToC](#toc)
 
+------
+
 ## Prerequisites ##
+
+⚠️ **Critical Safety Note**
+
+This guide assumes EverQuest is always run inside a Wine virtual desktop. Running EverQuest outside a virtual desktop can cause unrecoverable fullscreen display failures requiring a hard reboot.
+
+- Fullscreen inside the Wine virtual desktop is safe and recommended.
+- Windowed mode inside the virtual desktop is what causes most accidental breakage.
+
+- If you are not willing to run inside the virtual desktop, stop here.
 
 **EverQuest game and patcher files**
 
@@ -129,6 +157,10 @@ Before installing any software or creating Wine prefixes, you must already have 
 
 [ToC](#toc)
 
+------
+
+<span id="copypaste"></span>
+
 ## **How to copy & paste to terminal:**
 
 For the new and uninitiated Linux user, that was me a few weeks ago, the prospects of needing to use terminal can be a bit daunting. Rest assured that you are not going to have to learn any commands here, though that could be a nice side benefit of following this guide. Any step requiring the use of terminal (by the way you can open terminal with Ctrl+Alt+T) will be a simple matter of copying the command from the guide and pasting it into terminal and then pressing Enter.
@@ -142,6 +174,10 @@ some cryptic terminal command -r whodat reXing my system
 Pasting into your terminal may not be as intuitive. 1) Clicking anywhere in terminal, then pressing Ctrl+Shift+V should paste the clipboard contents into terminal, or 2) Clicking the Right mouse button anywhere in terminal should display a context menu that includes a paste option. Both options will paste the clipboard contents at the command prompt, and then you just press Enter. 
 
 [ToC](#toc)
+
+------
+
+<span id="onetimehost"></span>
 
 ## One-time host-level software stack installation
 
@@ -235,6 +271,10 @@ winetricks --version 2>/dev/null | cut -d' ' -f1
 
 [ToC](#toc)
 
+------
+
+<span id="onetimewine"></span>
+
 ## One-time Wine Prefix Configuration  ##
 
 Before running any commands, it’s important to understand exactly how this guide organizes files on disk. The layout below is not only a recommendation — it is the structure this guide **will** use when installing EverQuest on your system if you follow the guide verbatim. Using your own preferred layout is discussed at the bottom of this section.
@@ -245,46 +285,71 @@ Before running any commands, it’s important to understand exactly how this gui
 - One Wine prefix per EverQuest client 
 - No shared state between clients 
 - Clear, readable paths that scale cleanly for boxing 
-- Easy cleanup, backup, and troubleshooting 
+- Easy cleanup, deletion, backup, and troubleshooting 
 
 **Canonical directory tree** 
 
+⚠️ **Note**: The full Windows file system is shown only under `eq1` for clarity; the other `eqN` prefixes contain the same structure.
+
 
 ```text
-~/Games/EQAscendant/
-├── EQ-game-files/    # Staging area (EQ source files)
-├── eq1/              # Wine prefix (eq1)
-│  └── drive_c/
-│    └── Program Files/
-│      └── eq1/       # EverQuest client files (eq1)
-├── eq2/              # Wine prefix (eq2)
-│  └── drive_c/
-│    └── Program Files/
-│      └── eq2/       # EverQuest client files (eq2)
-├── eq3/              # Wine prefix (eq3)
-│  └── drive_c/
-│    └── Program Files/
-│      └── eq3/       # EverQuest client files (eq3)
-├── eq4/              # Wine prefix (eq4)
-   └── drive_c/
-     └── Program Files/
-       └── eq4/       # EverQuest client files (eq4)
+~/Games/EQAscendant/  # Root folder, 1st half of all Wine prefixes (Created by user)
+├── eq1/              # Unique 2nd half of a Wine prefix (Created by user)
+│  └── drive_c/                 # p/o the Windows file system (Created by Wine)
+│    └── Program Data/          # p/o the Windows file system (Created by Wine)
+│    └── users/                 # p/o the Windows file system (Created by Wine)
+│    └── windows/               # p/o the Windows file system (Created by Wine)
+│    └── Program Files (x86)/   # p/o the Windows file system (Created by Wine)
+│    └── Program Files/         # p/o the Windows file system (Created by Wine)
+│      └── eq1/       # EverQuest game folder (Created by user)
+├── eq2/              # Unique 2nd half of a Wine prefix (Created by user)
+│  └── drive_c/                 # p/o the Windows file system (Created by Wine)
+│    └── Program Files/         # p/o the Windows file system (Created by Wine)
+│      └── eq2/       # EverQuest game folder (Created by user)
+├── eq3/              # Unique 2nd half of a Wine prefix (Created by user)
+│  └── drive_c/                 # p/o the Windows file system (Created by Wine)
+│    └── Program Files/         # p/o the Windows file system (Created by Wine)
+│      └── eq3/       # EverQuest game folder (Created by user)
+├── eq4/              # Unique 2nd half of a Wine prefix (Created by user)
+│  └── drive_c/                 # p/o the Windows file system (Created by Wine)
+│    └── Program Files/         # p/o the Windows file system (Created by Wine)
+│      └── eq4/       # EverQuest game folder (Created by user)
+└── EQ-game-files/    # Staging folder for EQ game files (Created by user)
 ```
 
-How to read this
+How to read the **Canonical directory tree** :
 
-- ~/Games/EQAscendant/ is the root folder for all Wine prefixes and EverQuest clients. 
-- EQ-game-files/ is a staging area used to hold a clean EverQuest client plus the EQAscendant patcher; its contents are copied into prefixes during installs and are never run directly. 
-- Each eqN/ directory is a complete, isolated Wine prefix. This guide shows 4 eq directories. You can create as many as you like. 
-- Each prefix installs EverQuest into its own matching directory under Program Files/eqN. 
-- There is no shared Program Files/EverQuest directory. This one‑to‑one mapping (prefix ↔ client folder ↔ launcher) prevents cross‑contamination, makes boxing predictable, and ensures uninstalling a client is as simple as deleting its eqN/ directory. 
+- ~/Games/EQAscendant/ is the root folder for all Wine prefixes and EverQuest installs. It is created by the user.
+- Each eqN/ prefix folder is part of a unique, isolated Wine prefix. They are created by the user. This guide shows 4 eqN prefix folders. You can create as many as you like. Each complete and unique Wine prefix becomes (root folder + eqN prefix) as shown below:
+  - ~/Games/EQAscendant/eq1
+  - ~/Games/EQAscendant/eq2
+  - ~/Games/EQAscendant/eq3
+  - ~/Games/EQAscendant/eq4
+- Wine will install the Windows file system into each prefix. The entire Windows file system is only shown above in prefix eq1, but exists in all eqN prefixes. The part we care about particularly is the Program Files folder. The complete path to Program Files/ is (unique wine prefix + Windows file system) as shown below:
+  - ~/Games/EQAscendant/eq1/drive_c/Program Files/
+  - ~/Games/EQAscendant/eq2/drive_c/Program Files/
+  - ~/Games/EQAscendant/eq3/drive_c/Program Files/
+  - ~/Games/EQAscendant/eq4/drive_c/Program Files/
+
+⚠️ **Note**: Wine owns everything in the Windows file system.  ❌ Don't modify, rename or delete any part of it.
+
+- Each eqN EverQuest game folder is created by the user after Wine installs the Windows file system. The complete path to a eqN game folder becomes  (unique wine prefix + Windows file system + eqN) as shown below:
+  - ~/Games/EQAscendant/eq1/drive_c/Program Files/eq1/
+  - ~/Games/EQAscendant/eq2/drive_c/Program Files/eq2/
+  - ~/Games/EQAscendant/eq3/drive_c/Program Files/eq3/
+  - ~/Games/EQAscendant/eq4/drive_c/Program Files/eq4/
+- There is no shared Program Files/EverQuest directory. The one‑to‑one mapping (Unique Wine prefix ↔ matching EverQuest game folder) described above, lends itself to understanding your Wine/EverQuest directory structure. In technical benefits, it prevents cross‑contamination, makes boxing predictable, and ensures uninstalling a client is as simple as deleting its eqN/ directory. 
+- EQ-game-files/ is a staging folder created by the user, and is used to hold clean copies of the EverQuest game files and the EQAscendant patcher; its contents are copied into the EverQuest game folders during installs and ❌ **are never run directly**. This ensures the same known good source files are used for each of your EverQuest installs.
 
 #### Using your own layout design 
 
-Please use the layout described above for the purpose of getting through this guide with the provided copy and paste commands. After you have gone through this guide and are comfortable with the process you can create your EQ installs using your preferred layout. Uninstalling an existing Wine prefix and the associated EQ client is a simple matter of:
+- ⚠️ Please use the layout described above for the purpose of getting through this guide with the provided copy and paste commands. 
 
-- Delete the prefix folder (or any higher level folder in your home directory). None of the previously installed host-level software packages are effected. No part of a Wine prefix lives outside of the prefix folder. Deleting it is targeted total annihilation and the ultimate uninstall process. 
-- ❌ **Don’t** attempt to reuse any part of an existing prefix folder path in a new Wine prefix. You must follow the process to create each new Wine prefix. 
+- After you have gone through this guide and are comfortable with the process you can create your EQ installs using the example shown and described above and replacing the root folder, Wine prefixes and EQ game folders with your preferred layout. Uninstalling an existing Wine prefix and the associated EQ game folder is a simple matter of:
+
+  - Delete the prefix folder (or any higher level folder in your home directory). None of the previously installed host-level software packages are effected. No part of a Wine prefix lives outside of the prefix folder. Deleting it is a targeted total annihilation and the ultimate uninstall process. 
+
+  - ❌ **Don’t** attempt to reuse any part of an existing prefix folder path in a new Wine prefix. You must follow the process to create each new Wine prefix. 
 
 #### Populate the EQ-game-files folder (one‑time setup continued) 
 
@@ -341,8 +406,8 @@ EverQuest will soon be launching for the first time inside a Wine prefix. To ens
 ```bash
 # Edit EQ eqclient.ini: enforce safe fullscreen-in-virtual-desktop defaults
 
-X=1366
-Y=768
+X=1024
+Y=600
 
 INI="$HOME/Games/EQAscendant/EQ-game-files/eqclient.ini"
 
@@ -377,14 +442,14 @@ BEGIN {
 
   if (in_def) {
     if (!saw_ar) print "AllowResize=1"
-    if (!saw_max) print "Maximized=1"
+    if (!saw_max) print "Maximized=0"
     if (!saw_xo) print "WindowedModeXOffset=0"
     if (!saw_yo) print "WindowedModeYOffset=0"
     if (!saw_rx) print "RestoredXOffset=" x
     if (!saw_ry) print "RestoredYOffset=" y
     if (!saw_rw) print "RestoredWidth=" x
     if (!saw_rh) print "RestoredHeight=" y
-    if (!saw_wm) print "WindowedMode=FALSE"
+    if (!saw_wm) print "WindowedMode=TRUE"
     if (!saw_gamma) print "Gamma=4"
   }
 
@@ -431,14 +496,14 @@ END {
 
   if (in_def) {
     if (!saw_ar) print "AllowResize=1"
-    if (!saw_max) print "Maximized=1"
+    if (!saw_max) print "Maximized=0"
     if (!saw_xo) print "WindowedModeXOffset=0"
     if (!saw_yo) print "WindowedModeYOffset=0"
     if (!saw_rx) print "RestoredXOffset=" x
     if (!saw_ry) print "RestoredYOffset=" y
     if (!saw_rw) print "RestoredWidth=" x
     if (!saw_rh) print "RestoredHeight=" y
-    if (!saw_wm) print "WindowedMode=FALSE"
+    if (!saw_wm) print "WindowedMode=TRUE"
     if (!saw_gamma) print "Gamma=4"
   }
 
@@ -458,13 +523,15 @@ echo "Backup:  $(ls -1t "$INI".bak.* | head -n 1)"
 
 [ToC](#toc)
 
-#############################################################################
+<span id="beginrepeat"></span>
+
+------
 
 ## **BEGIN REPEATABLE PREFIX INSTALLATION PROCESS**
 
-#############################################################################
-
 Everything you did above set the stage and never has to be done again. From here on, we build one EverQuest client at a time, each isolated in its own Wine prefix. The steps that follow focus on layout and prefix creation first, installing the game and patcher into that prefix, verifying a good launch and creating a desktop launcher.  Each EverQuest client lives in its own Wine prefix. ⚠️ **Here's the first one!**:
+
+<span id="prefixeq1"></span>
 
 ### Create PREFIX eq1
 
@@ -545,8 +612,8 @@ WINEPREFIX=~/Games/EQAscendant/eq1 winecfg
 - - Enable: ✅ Allow the window manager to decorate the windows
   - Enable: ✅ Allow the window manager to control the windows
   - Enable: ✅ Emulate a virtual desktop
-  - Ensure all other boxes are unchecked
-  - Set the desktop size to 1366×768
+  - Ensure the other box is unchecked
+  - Set the desktop size to 1024×600
   - Click **Apply**, then **OK**. 
 - The wine configuration window will close.
 
@@ -568,6 +635,8 @@ WINEPREFIX=~/Games/EQAscendant/eq1 wine msiexec /i ~/Downloads/wine-mono-11.0.0-
 cd ~/Games/EQAscendant/eq1/drive_c/Program\ Files/eq1
 ```
 
+⚠️ **Note**: If your are following this process for another EMU, edit EQAscendant.exe in the following command to your specific patcher.exe file name. Your patcher.exe must auto-launch EverQuest, or the remainder of this guide will ❌ **not work for you**.
+
 - Launch the EQAscendant patcher: **(eq1 x 1)**
 
 ```bash
@@ -587,18 +656,27 @@ WINEPREFIX=~/Games/EQAscendant/eq1 wine EQAscendant.exe
 
 
 - After the patcher finishes patching, EverQuest will launch inside the Wine 1366×768 virtual desktop. (**the success signal for this step**).
-  -  ⚠️ Note: Always launch EverQuest via the EQAscendant patcher. 
+
+⚠️ Note: Always launch EverQuest via the EQAscendant patcher. 
+
+
 - Login to the Ascendant server
 
   - To speed server login along, when the SOE splash screen pops, **click** it to move to the login screen. If you don't "click", the splash screen remains in place for 30 seconds before progressing to login.
 
 - Create a test character if you don't already have a character
 - Enter world, and look around
-- OK, that's enough. Log out and close the game completely.
+- OK, that's enough. Back to work. Open the in-game Options
+- **⚠️ Important:**
 
-  - ⚠️ Note that terminal is not presenting a command prompt. 
-  - Click in terminal and press Ctrl+C to end the running process
-  - You should now have a command prompt
+  - Click the Display tab
+  - Click the Switch to Full Screen button.
+- Log out and close the game completely.
+
+⚠️ Note that terminal is not presenting a command prompt. 
+
+- Click in terminal and press Ctrl+C to end the running process
+- You should now have a command prompt
 
 
 10. Create a desktop launcher (eq1). 
@@ -616,7 +694,8 @@ mkdir -p ~/.local/share/icons
 ```
 
 - Copy the patcher icon to  ~/.local/share/icons.
-- ⚠️ Note: This is our first use of "sudo" so you'll have to enter your password after entering this command: **(eq1 x 3)**
+
+- ⚠️ This is our first use of "sudo", so you'll have to enter your password after entering the following command: **(eq1 x 3)**
 
 ```bash
 sudo cp ~/Games/EQAscendant/eq1/drive_c/Program\ Files/eq1/eqemupatcher.png ~/.local/share/icons/eqascendant-eq1.png
@@ -673,48 +752,23 @@ cp ~/.local/share/applications/EQAscendant-eq1.desktop ~/Desktop/EQAscendant-eq1
 
   - or use your preferred text editor
 
-
-
-#############################################################################
+- See Suggested EverQuest Window Resolutions below
 
 ###### **END REPEATABLE PREFIX INSTALLATION PROCESS**
 
-#############################################################################
+------
 
 [ToC](#toc)
 
-- Enable Wine Virtual Desktop: Open Wine configuration for this prefix: **(eq1 x 1)**
+------
 
-```bash
-WINEPREFIX=~/Games/EQAscendant/eq1 winecfg
-```
+### Suggested EverQuest Window Resolutions
 
-- When the Wine configuration window opens **(success signal for this operation)**, make only the following changes:
+When using Wine’s virtual desktop and running EverQuest in full screen mode, it is often helpful to choose resolutions that are *smaller than your native monitor resolution*. This improves usability when boxing, and reduces GPU overhead.
 
-- Graphics tab: 
-  - Enable: ✅ Emulate a virtual desktop
-  - Set the desktop size to 1366×768
-  - Ensure all other boxes are unchecked
-  - Click **Apply**, then **OK**. 
-- The wine configuration window will close.
+The table below lists common monitor resolutions and several descending, practical window sizes that work well for EverQuest client windows.
 
-1. Open eqclient and edit the video settings:
-
-- or open with kate (editor similar to notepad/notepad++) install with: sudo apt install kate
-
-```bash
-kate ~/Games/EQAscendant/eq1/drive_c/Program\ Files/eq1/eqclient.ini
-```
-
-- 
-
-### Suggested Wine Virtual Desktop and EverQuest Window Resolutions
-
-When using Wine’s virtual desktop and running EverQuest in windowed mode, it is often helpful to choose resolutions that are *smaller than your native monitor resolution*. This improves usability when boxing, reduces GPU overhead, and avoids UI scaling issues.
-
-The table below lists common monitor resolutions and several descending, practical window sizes that work well for Wine virtual desktops and EverQuest client windows.
-
-These are *recommendations*, not requirements. Feel free to experiment once your setup is stable. They key to choosing a EQ resolution and a matching Wine desktop resolution is to initially set both to large, or to your Monitors Native resolution, and then in-game set display video modes to various options and find one you're satisfied with. Note that the Wine desktop will not resize based on your in-game selection. 
+These are *recommendations*, not requirements. Feel free to experiment once your setup is stable. Use the in-game setting (Options>Display>Video Mode) to choose from the games' listed resolutions. The Wine desktop will resize based on your in-game selection as long as your are set to full screen in-game. 
 
 | Your Monitor (Native) | Large     | Medium (Good Default) | Small (Boxing‑Friendly) | Very Small (Utility/Box) |
 | --------------------- | --------- | --------------------- | ----------------------- | ------------------------ |
@@ -726,18 +780,12 @@ These are *recommendations*, not requirements. Feel free to experiment once your
 
 Guidance:
 
-- Use a medium resolution for your first successful launch.
+- 1024×600 was chosen as the first-launch resolution to fit most monitor sizes.
 - Use smaller resolutions when running multiple clients simultaneously.
 - EverQuest’s UI scales better when resolutions follow standard 16:9 or 16:10 ratios.
 - You can use *different resolutions per client* when boxing.
 
-Wine’s virtual desktop only constrains window boundaries — it does *not* affect in‑game gamma behavior, input handling, or rendering quality.
-
-
-
-```bash##### 
-
-```
+------
 
 ### Defining the repeatable process
 
@@ -746,15 +794,17 @@ You may have noticed that just above most of the code blocks in the repeatable p
 1. Run the **REPEATABLE PREFIX INSTALLATION PROCESS** above. Paste the code as is from the guide to terminal, but before you press Enter: 
    - use the Left-arrow and Right-arrow keys to scroll non-destructively through the command and change each occurrence of eq1 to eq2. Use backspace or del to remove the 1 depending on where your cursor is, then type 2
    - After making the changes you can press Enter from anywhere in the command to execute it
-2. (**Preferred method for lower risk**) Run the **REPEATABLE PREFIX INSTALLATION PROCESS** above. Paste the code as is from the guide into a text editor. I like kate (sudo apt install kate) for its notepad/notepad++ like interface. 
+2. (**Preferred method for lower risk**) Run the **REPEATABLE PREFIX INSTALLATION PROCESS** above. Paste the code as is from the guide into a text editor. I like kate for its desktop notepad++ like interface. Install with: sudo apt install kate 
    - Edit each occurrence of eq1 to eq2 in the text editor. 
    - Copy the result and paste in terminal, then press Enter
 
 3) or **Don't do any of that.** Be lazy and safe and just copy and paste from my prefabs for eq2 - eq4 installs. They are found directly below. If you want more than 4 installs, do method 1 or 2 above
 
-#############################################################################
 
-### Cheater!
+
+------
+
+<span id="prefixeq2"></span>
 
 ### Create PREFIX eq2
 
@@ -924,7 +974,9 @@ cp ~/.local/share/applications/EQAscendant-eq2.desktop ~/Desktop/EQAscendant-eq2
 
 [ToC](#toc)
 
-#############################################################################
+------
+
+<span id="prefixeq3"></span>
 
 ### Create PREFIX eq3
 
@@ -1052,7 +1104,7 @@ mkdir -p ~/.local/share/icons
 - Copy the patcher icon to  ~/.local/share/icons.
 
 ```bash
-sudo cp ~/Games/EQAscendant/eq2/drive_c/Program\ Files/eq2/eqemupatcher.png ~/.local/share/icons/eqascendant-eq2.png
+sudo cp ~/Games/EQAscendant/eq3/drive_c/Program\ Files/eq2/eqemupatcher.png ~/.local/share/icons/eqascendant-eq3.png
 ```
 
 - Create the launcher .desktop file:
@@ -1094,7 +1146,9 @@ cp ~/.local/share/applications/EQAscendant-eq3.desktop ~/Desktop/EQAscendant-eq3
 
 [ToC](#toc)
 
-#############################################################################
+------
+
+ <span id="prefixeq4"></span>
 
 ### Create PREFIX eq4
 
@@ -1264,130 +1318,13 @@ cp ~/.local/share/applications/EQAscendant-eq4.desktop ~/Desktop/EQAscendant-eq4
 
 [ToC](#toc)
 
-#############################################################################
+------
 
 ## Appendix: Concepts and Terminology
 
-This appendix provides short, practical explanations of key concepts and technologies referenced throughout this guide. The goal is not academic completeness, but enough context that you understand *what each piece is*, *why it exists*, and *why this guide uses it the way it does*.
-
-### Important: Always Run EverQuest Inside the WINE Virtual Desktop
-
-**Do not skip this section.**
-
-EverQuest is a very old Windows application. When run under WINE *without* a virtual desktop, it can attempt to take direct control of your display mode. On modern systems this has been observed to cause:
-
-- full‑screen blackouts
-- loss of keyboard and mouse input
-- display modes that do not recover
-- situations where the only way out is a **hard power‑off of the PC**
-
-These failures can happen **instantly**, without warning, and without a safe recovery path.
-
-- Once this happens, keyboard shortcuts may not work. Alt‑Tab may not work.
-- You may be forced to reboot using the power button.
-
-#### ✅ The Virtual Desktop Is Your Safety Net
-
-For this reason, **this guide assumes EverQuest is always run inside a WINE virtual desktop**.
- Running outside the virtual desktop is **not supported by this guide**.The WINE virtual desktop provides a containment layer that protects your system:
-
-- EverQuest cannot change your real display resolution
-- Alt‑Tab always works
-- A crashed client cannot take down your desktop
-- Fullscreen mode becomes safe and predictable
-
-Inside the virtual desktop, fullscreen **does not mean real fullscreen**.
- It means:
-
-> “Fullscreen within a window that WINE controls.”
-
-That distinction is critical for stability.
+This appendix provides mostly short, practical explanations of key concepts and technologies referenced throughout this guide. The goal is not academic completeness, but enough context that you understand *what each piece is*, *why it exists*, and *why this guide uses it the way it does*.
 
 ------
-
-## ✅ Recommended Display Mode: Fullscreen (Inside the Virtual Desktop)
-
-Once EverQuest is running **inside the WINE virtual desktop**, you should use **Fullscreen mode from within EverQuest**.
-
-This is intentional and recommended.
-
-### Why fullscreen is preferred here
-
-Running fullscreen *inside the virtual desktop*:
-
-- hides the title bar (nothing to accidentally drag)
-- prevents window movement
-- avoids broken window geometry
-- preserves the chosen size across restarts
-- makes boxed setups easier to reproduce
-
-Most importantly:
-
-> **Fullscreen inside the virtual desktop is safe.**
-
-It does **not**:
-
-- change your monitor resolution
-- lock your system
-- trap your keyboard
-- risk black‑screen failures
-
-------
-
-## 🚫 Avoid Windowed Mode in EverQuest
-
-EverQuest’s **Windowed Mode** exposes a draggable title bar and relies on legacy window behavior. Under WINE this can lead to:
-
-- accidental window movement
-- corrupted saved window positions
-- clients launching off‑screen
-- unstable multi‑client layouts
-
-For this reason, the guide strongly recommends:
-
-> **Do not enable Windowed Mode in EverQuest.**
-
-If you need to adjust the size of the game view, use:
-
-> **Options → Display → Video Modes**
->  (while remaining in Fullscreen mode)
-
-Changes made there are preserved cleanly across launches.
-
-------
-
-## 🔁 If You Accidentally Switch to Windowed Mode
-
-This will happen. People click things.
-
-If it does, **do not drag the window around** trying to fix it.
-
-Instead:
-
-1. Open **Options → Display → Video Modes**
-2. Switch back to **Fullscreen**
-3. Re‑select your desired resolution
-4. Exit EverQuest normally and relaunch
-
-This returns the client to a stable state.
-
-------
-
-## ✅ Quick Rules to Remember
-
-> **Always launch inside the WINE virtual desktop.**
->  **Always use Fullscreen mode inside EverQuest.**
->  **Resize using the Video Modes dialog, not by dragging windows.**
-
-Breaking any of these rules can lead to instability that is difficult—or impossible—to recover from cleanly.
-
-------
-
-## TL;DR (Callout Box)
-
-> **Do NOT run EverQuest outside the WINE virtual desktop.**
->  **Fullscreen inside the virtual desktop is safe and recommended.**
->  **Windowed Mode is discouraged due to instability and drag issues.**
 
 ### Wine
 
@@ -1400,6 +1337,12 @@ Why this matters:
 - Each application behaves according to how well Wine implements the Windows APIs it depends on.
 
 In this guide, Wine is the foundation that allows EverQuest and the EQAscendant patcher to run on Linux at all.
+
+Back to [ToC](#toc) or [Guide Goals](#Guide Goals)
+
+------
+
+<a id="wineprefix"></a>
 
 ### Wine Prefix
 
@@ -1424,6 +1367,12 @@ Why this guide uses one prefix per EverQuest client:
 
 In short: one prefix = one EverQuest client = predictable behavior.
 
+Back to [ToC](#toc) or [Guide Goals](#Guide Goals)
+
+------
+
+<a id="wow64"></a>
+
 ### 32‑bit vs 64‑bit (WoW64)
 
 EverQuest (Rain of Fear era) is a 32‑bit Windows application. Modern Wine installations are typically 64‑bit Wine with WoW64 support, which means:
@@ -1432,6 +1381,10 @@ EverQuest (Rain of Fear era) is a 32‑bit Windows application. Modern Wine inst
 - 32‑bit Windows applications are fully supported inside the same prefix
 
 You do *not* need a separate 32‑bit Wine installation. The guide assumes a standard modern Wine setup that supports both.
+
+Back to [ToC](#toc) or [Guide Goals](#Guide Goals)
+
+------
 
 ### DXVK
 
@@ -1453,6 +1406,10 @@ DXVK is installed per Wine prefix, not system-wide. This ensures:
 
 Without DXVK, EverQuest may still launch — but visual glitches, crashes, or erratic fullscreen behavior are far more likely.
 
+Back to [ToC](#toc) or [Guide Goals](#Guide Goals)
+
+------
+
 ### Vulkan
 
 Vulkan is a modern, low-overhead graphics API supported by current GPUs and drivers (including NVIDIA, AMD, and Intel).
@@ -1464,7 +1421,11 @@ DXVK relies on Vulkan as its backend. If Vulkan is working correctly on your sys
 
 Your distribution’s graphics driver packages handle Vulkan support. This guide does not require any manual Vulkan configuration.
 
-### Wine Mono
+Back to [ToC](#toc) or [Guide Goals](#Guide Goals)
+
+------
+
+### Wine-Mono
 
 Wine Mono is Wine’s open-source replacement for Microsoft’s .NET Framework.
 
@@ -1481,13 +1442,21 @@ Why this guide installs Wine Mono manually:
 
 By installing Wine Mono *before* first launch, the guide ensures deterministic behavior with no reliance on pop-ups or prompts.
 
-### Wine Gecko
+Back to [ToC](#toc) or [Guide Goals](#Guide Goals)
+
+------
+
+### Wine-Gecko
 
 Wine Gecko provides an Internet Explorer–like HTML rendering engine inside Wine. It is mainly used by applications that embed web views.
 
 EverQuest itself does not depend on Gecko. Some patchers and launchers may.
 
 If Wine prompts to install Gecko during prefix creation, it is safe to allow it. Gecko does not interfere with EQ or DXVK.
+
+Back to [ToC](#toc) or [Guide Goals](#Guide Goals)
+
+------
 
 ### winetricks
 
@@ -1505,17 +1474,142 @@ Why the guide keeps winetricks usage minimal:
 
 The fewer moving parts inside a prefix, the easier it is to debug and reproduce.
 
-### Virtual Desktop (Wine)
+Back to [ToC](#toc) or [Guide Goals](#Guide Goals)
 
-Wine’s virtual desktop option runs Windows applications inside a fixed-size window instead of allowing them to take over the real display.
+------
+
+<a id="virtdt"></a>
+
+### Wine Virtual Desktop
+
+EverQuest is a very old Windows application. When run under WINE *without* a virtual desktop, it can attempt to take direct control of your display mode. On modern systems this has been observed to cause:
+
+- full‑screen blackouts
+- loss of keyboard and mouse input
+- display modes that do not recover
+- situations where the only way out is a **hard power‑off of the PC**
+
+These failures can happen **instantly**, without warning, and without a safe recovery path.
+
+- Once this happens, keyboard shortcuts may not work. Alt‑Tab may not work.
+- You may be forced to reboot using the power button.
+
+#### ✅ The Virtual Desktop Is Your Safety Net
+
+For this reason, **this guide assumes EverQuest is always run inside a WINE virtual desktop**. Running outside the virtual desktop is **not supported by this guide**. The WINE virtual desktop provides a containment layer that protects your system:
+
+- EverQuest cannot change your real display resolution
+- Alt‑Tab always works
+- A crashed client cannot take down your desktop
+- Fullscreen mode becomes safe and predictable
+
+Inside the virtual desktop, fullscreen **does not mean real fullscreen**.
+It means:
+
+> “Fullscreen within a window that WINE controls.”
+
+That distinction is critical for stability. Wine’s virtual desktop option runs Windows applications inside a fixed-size window instead of allowing them to take over the real display.
 
 Why it is recommended for first launch:
 
 - Prevents fullscreen mode switching during initial DirectX setup
 - Avoids display reconfiguration glitches
 - Makes first-time configuration safer and more predictable
+- Once you are up and running on your EverQuest client you can use in-game options to change video modes to other screen dimensions. The virtual desktop will resize automatically. 
 
-You can disable the virtual desktop later if you prefer native window management.
+You can disable the virtual desktop later if you prefer native window management. This author won't take responsibility for any resulting window behavior issues.
+
+Back to [ToC](#toc) or [Guide Goals](#Guide Goals)
+
+## ✅ Recommended Display Mode: Fullscreen (Inside the Virtual Desktop)
+
+Once EverQuest is running **inside the WINE virtual desktop**, you should use **Fullscreen mode from within EverQuest**. ⚠️ **ALWAYS**.
+
+This is intentional and recommended.
+
+### Why fullscreen is preferred here
+
+Running fullscreen *inside the virtual desktop*:
+
+- hides the title bar (nothing to accidentally drag)
+- prevents window movement
+- avoids broken window geometry
+- preserves the chosen size across restarts
+- makes boxed setups easier to reproduce
+
+Most importantly:
+
+> **Fullscreen inside the virtual desktop is safe.**
+
+It does **not**:
+
+- change your monitor resolution
+- lock your system
+- trap your keyboard
+- risk black‑screen failures
+
+Back to [ToC](#toc) or [Guide Goals](#Guide Goals)
+
+## 🚫 Avoid Windowed Mode in EverQuest
+
+EverQuest’s **Windowed Mode** exposes a draggable title bar and relies on legacy window behavior. Under WINE this can lead to:
+
+- accidental window movement
+- corrupted saved window positions
+- clients launching off‑screen
+- unstable multi‑client layouts
+
+For this reason, the guide strongly recommends:
+
+> **Do not enable Windowed Mode in EverQuest.**
+
+If you need to adjust the size of the game view, use:
+
+> **Options → Display → Video Modes**
+>  (while remaining in Fullscreen mode)
+
+Changes made there are preserved cleanly across launches.
+
+Back to [ToC](#toc) or [Guide Goals](#Guide Goals)
+
+### 🔁 If You Accidentally Switch to Windowed Mode
+
+This will happen. People click things.
+
+If it does, **do not drag the window around** trying to fix it.
+
+Instead:
+
+1. Open **Options → Display → Video Modes**
+2. Switch back to **Fullscreen**
+3. Re‑select your desired resolution
+4. Exit EverQuest normally and relaunch
+
+This returns the client to a stable state.
+
+------
+
+## ✅ Quick Rules to Remember
+
+> **Always launch inside the WINE virtual desktop.**
+> **Always use Fullscreen mode inside EverQuest.**
+> **Resize using the Video Modes dialog, not by dragging windows.**
+
+Breaking any of these rules can lead to instability that is difficult—or impossible—to recover from cleanly.
+
+------
+
+## TL;DR
+
+>  **Do NOT run EverQuest outside the WINE virtual desktop.**
+>  **Fullscreen inside the virtual desktop is safe and recommended.**
+>  **Windowed Mode is discouraged due to instability and drag issues.**
+
+Back to [ToC](#toc) or [Guide Goals](#Guide Goals)
+
+------
+
+<a id="boxing"></a>
 
 ### Boxing / Multi‑Client Setup
 
@@ -1533,6 +1627,12 @@ This avoids the classic problems seen on both Windows and Wine:
 - Input conflicts
 - Patchers modifying the wrong installation
 
+Back to [ToC](#toc) or [Guide Goals](#Guide Goals)
+
+------
+
+<a id="opion"></a>
+
 ### Why This Guide Is Opinionated
 
 Many Linux/Wine guides present multiple paths and leave decisions to the reader. This guide intentionally does not.
@@ -1547,5 +1647,5 @@ Once you understand the process, you can deviate safely. Until then, following a
 
 If you ever wonder *why* a step exists, it should now be answerable somewhere in this appendix.
 
-##### 
+Back to [ToC](#toc) or [Guide Goals](#Guide Goals)
 
