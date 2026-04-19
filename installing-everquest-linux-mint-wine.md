@@ -1270,11 +1270,7 @@ cp ~/.local/share/applications/EQAscendant-eq4.desktop ~/Desktop/EQAscendant-eq4
 
 This appendix provides short, practical explanations of key concepts and technologies referenced throughout this guide. The goal is not academic completeness, but enough context that you understand *what each piece is*, *why it exists*, and *why this guide uses it the way it does*.
 
-------
-
-## ⚠️ 
-
-## Important: Always Run EverQuest Inside the WINE Virtual Desktop
+### Important: Always Run EverQuest Inside the WINE Virtual Desktop
 
 **Do not skip this section.**
 
