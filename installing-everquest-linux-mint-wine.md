@@ -1283,17 +1283,13 @@ EverQuest is a very old Windows application. When run under WINE *without* a vir
 
 These failures can happen **instantly**, without warning, and without a safe recovery path.
 
-> **Once this happens, keyboard shortcuts may not work. Alt‑Tab may not work.
->  You may be forced to reboot using the power button.**
+- Once this happens, keyboard shortcuts may not work. Alt‑Tab may not work.
+- You may be forced to reboot using the power button.
+
+#### ✅ The Virtual Desktop Is Your Safety Net
 
 For this reason, **this guide assumes EverQuest is always run inside a WINE virtual desktop**.
- Running outside the virtual desktop is **not supported by this guide**.
-
-------
-
-## ✅ The Virtual Desktop Is Your Safety Net
-
-The WINE virtual desktop provides a containment layer that protects your system:
+ Running outside the virtual desktop is **not supported by this guide**.The WINE virtual desktop provides a containment layer that protects your system:
 
 - EverQuest cannot change your real display resolution
 - Alt‑Tab always works
