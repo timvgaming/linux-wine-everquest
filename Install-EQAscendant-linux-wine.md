@@ -1,4 +1,5 @@
 # Installing EverQuest in Linux Wine
+
 ## *EQAscendant Version* 
 
 **Author note & disclaimer:** I (Hrain on EQAscendant Discord) and (timvgaming on GitHub), do not serve in any official capacity with EQAscendant, nor do I speak for the project or its staff. I am simply an EverQuest player who enjoys this server, and is sharing what I’ve learned to help other players. All configuration guidance here reflects personal experience, not official project policy. <span id="toc"></span>
@@ -66,7 +67,7 @@
 This guide will hopefully get you up and running with one or more EverQuest clients on Linux using Wine, while giving you a practical understanding of the pieces and processes involved. While this guide is specifically constructed and worded to support playing on the EQAscendant EMU server, it will support other EMUs with the differences being the EMU specific EverQuest game files (typically Rain of Fear or Titanium) and the EMU specific patcher files. Both of those are only referenced in one section of the guide and are **user placed** in a specific folder. All terminal commands and processes in the guide are not specific to any particular EMU with the exception of the patcher launch and .desktop shortcuts setup, where it is assumed that your patchername.exe launches EverQuest automatically. If it doesn't do that, then the remainder of the guide won't apply to you. I may append the guide later to support that case. Principle goals with links to any applicable Appendix expanded descriptions are:
 
 - ⚠️ Launch and play EverQuest via the EQAscendant patcher. 
--  [Wine](#Wine) is a compatibility layer that allows Windows applications to run on Linux.
+- [Wine](#Wine) is a compatibility layer that allows Windows applications to run on Linux.
 - A  [Wine Prefix](#wineprefix) is a self-contained directory that represents a *simulated Windows environment*.
 - Wine’s [Virtual Desktop](#virtdt) option runs Windows applications inside a fixed-size window.
 - Understanding  [32‑bit vs 64‑bit (WoW64)](#wow64)
@@ -390,6 +391,7 @@ Before creating the first Wine prefix, place the EverQuest client files and the 
 ```bash
 mkdir -p ~/Games/EQAscendant/EQ-game-files
 ```
+
 - ❌ **Do not** create any eqN directories yet; Wine will create them during prefix initialization. 
 
 2. Copy and paste the EverQuest client files and the EQAscendant patcher files into the staging folder
@@ -418,11 +420,11 @@ mkdir -p ~/Games/EQAscendant/EQ-game-files
 
 -  ⚠️ **Important**: If your file manager prompts you to choose an action for existing files (for example, Replace, Overwrite, or Merge), choose the option that replaces existing files. The patcher is expected to overwrite some files shipped with the base client. 
 
-- ❌ **What not to do:**
+-  ❌ **What not to do:**
 
-- Do not mix files from different EverQuest eras 
-- Do not create any eqN Wine prefixes yet 
-- Do not run the patcher or the game from EQ-game-files
+-  Do not mix files from different EverQuest eras 
+-  Do not create any eqN Wine prefixes yet 
+-  Do not run the patcher or the game from EQ-game-files
 
 At the end of this step, EQ-game-files/ should contain a complete EverQuest client plus the EQAscendant patcher, ready to be copied into Wine prefixes. 
 
@@ -436,7 +438,7 @@ EverQuest will soon be launching for the first time inside a Wine prefix. To ens
 # Edit EQ eqclient.ini: enforce safe fullscreen-in-virtual-desktop defaults
 
 X=1024
-Y=600
+Y=768
 
 INI="$HOME/Games/EQAscendant/EQ-game-files/eqclient.ini"
 
@@ -545,6 +547,7 @@ END {
 echo "Updated: $INI"
 echo "Backup:  $(ls -1t "$INI".bak.* | head -n 1)"
 ```
+
 - Gama is set low. A low initial gamma (such as Gamma=4, approximately 15% in‑game) mitigates display gamma bleed into the desktop environment under Wine while still providing a comfortable baseline. You can fine‑tune gamma and dimensions later using the in‑game options. 
 
 - This creates a clean, deterministic baseline for the initial launch. No further editing is required at this stage. At this point, the EQ-game-files/ folder contains a clean, reproducible EverQuest + EQAscendant baseline. 
@@ -641,7 +644,7 @@ WINEPREFIX=~/Games/EQAscendant/eq1 winecfg
   - Enable: ✅ Allow the window manager to control the windows
   - Enable: ✅ Emulate a virtual desktop
   - Ensure the Automatically capture the mouse in full-screen windows box is unchecked
-  - Set the desktop size to 1024×600
+  - Set the desktop size to 1024×768
   - Click **Apply**, then **OK**. 
 - The wine configuration window will close.
 
@@ -697,9 +700,9 @@ WINEPREFIX=~/Games/EQAscendant/eq1 wine EQAscendant.exe
 - OK, that's enough. Back to work. Open the in-game Options
 - **⚠️ Important:**
 
-  - Click the Display tab. On the upper left side of Display options, there is a button that will be either labeled "Switch to Windowed" or "Switch to Fullscreen". If it reads "Switch to Windowed", do nothing. If it reads "Switch to Fullscreen" then click it. 
-  - The button should now read "Switch to Windowed". As you play the game and fiddle with options, never click the button when it read "Switch to Windowed". You must always be in Fullscreen mode.
-- Log out and close the game completely.
+  - Click the Display tab. On the upper left side of Display options, there is a button that will either read "Switch to Windowed" or "Switch to Fullscreen". If it reads "Switch to Windowed", do nothing. If it reads "Switch to Fullscreen" then click it. 
+  - The button should now read "Switch to Windowed". As you play the game and fiddle with options, never click the button when it reads "Switch to Windowed". You must always be in Fullscreen mode.
+- Log out and close the game completely. ❌ **Do not proceed** until the game and Wine desktop have completely closed.
 
 ⚠️ Note that terminal is not presenting a command prompt. 
 
@@ -787,7 +790,7 @@ cp ~/.local/share/applications/EQAscendant-eq1.desktop ~/Desktop/EQAscendant-eq1
 #### **⚠️ Note: EverQuest (eq1) is yours to play now. Recommended reading is:**
 
 -  [Defining the Repeatable Wine Prefix Process](#definerepeat) if you want to install additional EverQuest clients.
-- [EverQuest Window Resolutions](#windowres) if you want to see some typical EverQuest Video Modes settings.
+-  [EverQuest Window Resolutions](#windowres) if you want to see some typical EverQuest Video Modes settings.
 
 [ToC](#toc)
 
@@ -806,10 +809,10 @@ These are *recommendations*, not requirements. Feel free to experiment once your
 | Your Monitor (Native) | Large     | Medium (Good Default) | Small (Boxing‑Friendly) | Very Small (Utility/Box) |
 | --------------------- | --------- | --------------------- | ----------------------- | ------------------------ |
 | 3840×2160 (4K)        | 2560×1440 | 1920×1080             | 1600×900                | 1280×720                 |
-| 2560×1440 (1440p)     | 1920×1080 | 1600×900              | 1366×768                | 1280×720                 |
-| 1920×1080 (1080p)     | 1600×900  | 1366×768              | 1280×720                | 1024×768                 |
-| 1680×1050             | 1440×900  | 1280×800              | 1280×720                | 1024×768                 |
-| 1366×768              | 1280×720  | 1024×768              | 1024×600                | 800×600                  |
+| 2560×1440 (1440p)     | 1920×1080 | 1600×900              | 1280×720                | 1152×864                 |
+| 1920×1080 (1080p)     | 1600×900  | 1400×1050             | 1152×864                | 1024×600                 |
+| 1680×1050             | 1440×900  | 1280×720              | 1024×600                | 768×576                  |
+| 1366×768              | 1280×720  | 1024×768              | 768×576                 | 640×80                   |
 
 Guidance:
 
@@ -922,7 +925,7 @@ WINEPREFIX=~/Games/EQAscendant/eq2 winecfg
   - Enable: ✅ Allow the window manager to control the windows
   - Enable: ✅ Emulate a virtual desktop
   - Ensure the Automatically capture the mouse in full-screen windows box is unchecked
-  - Set the desktop size to 1024×600
+  - Set the desktop size to 1024×768
   - Click **Apply**, then **OK**. 
 - The wine configuration window will close.
 
@@ -978,9 +981,9 @@ WINEPREFIX=~/Games/EQAscendant/eq2 wine EQAscendant.exe
 - OK, that's enough. Back to work. Open the in-game Options
 - **⚠️ Important:**
 
-  - Click the Display tab. On the upper left side of Display options, there is a button that will be either labeled "Switch to Windowed" or "Switch to Fullscreen". If it reads "Switch to Windowed", do nothing. If it reads "Switch to Fullscreen" then click it. 
+  - Click the Display tab. On the upper left side of Display options, there is a button that will either read "Switch to Windowed" or "Switch to Fullscreen". If it reads "Switch to Windowed", do nothing. If it reads "Switch to Fullscreen" then click it. 
   - The button should now read "Switch to Windowed". As you play the game and fiddle with options, never click the button when it reads "Switch to Windowed". You must always be in Fullscreen mode.
-- Log out and close the game completely.
+- Log out and close the game completely. ❌ **Do not proceed** until the game and Wine desktop have completely closed.
 
 ⚠️ Note that terminal is not presenting a command prompt. 
 
@@ -1068,7 +1071,7 @@ cp ~/.local/share/applications/EQAscendant-eq2.desktop ~/Desktop/EQAscendant-eq2
 #### **⚠️ Note: EverQuest (eq2) is yours to play now. Recommended reading is:**
 
 -  [Defining the Repeatable Wine Prefix Process](#definerepeat) if you want to install additional EverQuest clients.
-- [EverQuest Window Resolutions](#windowres) if you want to see some typical EverQuest Video Modes settings.
+-  [EverQuest Window Resolutions](#windowres) if you want to see some typical EverQuest Video Modes settings.
 
 **END eq2 PREFIX INSTALLATION PROCESS**
 
@@ -1158,7 +1161,7 @@ WINEPREFIX=~/Games/EQAscendant/eq3 winecfg
   - Enable: ✅ Allow the window manager to control the windows
   - Enable: ✅ Emulate a virtual desktop
   - Ensure the Automatically capture the mouse in full-screen windows box is unchecked
-  - Set the desktop size to 1024×600
+  - Set the desktop size to 1024×768
   - Click **Apply**, then **OK**. 
 - The wine configuration window will close.
 
@@ -1214,9 +1217,9 @@ WINEPREFIX=~/Games/EQAscendant/eq3 wine EQAscendant.exe
 - OK, that's enough. Back to work. Open the in-game Options
 - **⚠️ Important:**
 
-  - Click the Display tab. On the upper left side of Display options, there is a button that will be either labeled "Switch to Windowed" or "Switch to Fullscreen". If it reads "Switch to Windowed", do nothing. If it reads "Switch to Fullscreen" then click it. 
-  - The button should now read "Switch to Windowed". As you play the game and fiddle with options, never click the button when it read "Switch to Windowed". You must always be in Fullscreen mode.
-- Log out and close the game completely.
+  - Click the Display tab. On the upper left side of Display options, there is a button that will either read "Switch to Windowed" or "Switch to Fullscreen". If it reads "Switch to Windowed", do nothing. If it reads "Switch to Fullscreen" then click it. 
+  - The button should now read "Switch to Windowed". As you play the game and fiddle with options, never click the button when it reads "Switch to Windowed". You must always be in Fullscreen mode.
+- Log out and close the game completely. ❌ **Do not proceed** until the game and Wine desktop have completely closed.
 
 ⚠️ Note that terminal is not presenting a command prompt. 
 
@@ -1305,7 +1308,7 @@ cp ~/.local/share/applications/EQAscendant-eq3.desktop ~/Desktop/EQAscendant-eq3
 #### **⚠️ Note: EverQuest (eq3) is yours to play now. Recommended reading is:**
 
 -  [Defining the Repeatable Wine Prefix Process](#definerepeat) if you want to install additional EverQuest clients.
-- [EverQuest Window Resolutions](#windowres) if you want to see some typical EverQuest Video Modes settings.
+-  [EverQuest Window Resolutions](#windowres) if you want to see some typical EverQuest Video Modes settings.
 
 1. **END eq3 PREFIX INSTALLATION PROCESS**
 
@@ -1395,7 +1398,7 @@ WINEPREFIX=~/Games/EQAscendant/eq4 winecfg
   - Enable: ✅ Allow the window manager to control the windows
   - Enable: ✅ Emulate a virtual desktop
   - Ensure the Automatically capture the mouse in full-screen windows box is unchecked
-  - Set the desktop size to 1024×600
+  - Set the desktop size to 1024×768
   - Click **Apply**, then **OK**. 
 - The wine configuration window will close.
 
@@ -1451,9 +1454,9 @@ WINEPREFIX=~/Games/EQAscendant/eq4 wine EQAscendant.exe
 - OK, that's enough. Back to work. Open the in-game Options
 - **⚠️ Important:**
 
-  - Click the Display tab. On the upper left side of Display options, there is a button that will be either labeled "Switch to Windowed" or "Switch to Fullscreen". If it reads "Switch to Windowed", do nothing. If it reads "Switch to Fullscreen" then click it. 
-  - The button should now read "Switch to Windowed". As you play the game and fiddle with options, never click the button when it read "Switch to Windowed". You must always be in Fullscreen mode.
-- Log out and close the game completely.
+  - Click the Display tab. On the upper left side of Display options, there is a button that will either read "Switch to Windowed" or "Switch to Fullscreen". If it reads "Switch to Windowed", do nothing. If it reads "Switch to Fullscreen" then click it. 
+  - The button should now read "Switch to Windowed". As you play the game and fiddle with options, never click the button when it reads "Switch to Windowed". You must always be in Fullscreen mode.
+- Log out and close the game completely. ❌ **Do not proceed** until the game and Wine desktop have completely closed.
 
 ⚠️ Note that terminal is not presenting a command prompt. 
 
@@ -1541,7 +1544,7 @@ cp ~/.local/share/applications/EQAscendant-eq4.desktop ~/Desktop/EQAscendant-eq4
 #### **⚠️ Note: EverQuest (eq4) is yours to play now. Recommended reading is:**
 
 -  [Defining the Repeatable Wine Prefix Process](#definerepeat) if you want to install additional EverQuest clients.
-- [EverQuest Window Resolutions](#windowres) if you want to see some typical EverQuest Video Modes settings.
+-  [EverQuest Window Resolutions](#windowres) if you want to see some typical EverQuest Video Modes settings.
 
 1. **END eq4 PREFIX INSTALLATION PROCESS**
 
@@ -1799,7 +1802,7 @@ For this reason, the guide strongly recommends:
 If you need to adjust the size of the game view, use:
 
 > **Options → Display → Video Modes**
->  (while remaining in Fullscreen mode)
+> (while remaining in Fullscreen mode)
 
 Changes made there are preserved cleanly across launches.
 
