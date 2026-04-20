@@ -158,22 +158,19 @@ This guide assumes EverQuest is always run inside a Wine virtual desktop. Runnin
 Before installing any software or creating Wine prefixes, you must already have the following game‑specific assets. If you cannot locate these, you should **stop here** — the remaining steps depend on them.
 
 1. A legally obtained EverQuest client (Rain of Fear era) that you are licensed to use:
-   - Existing Rain of Fear client directories from a prior Windows or Linux installation may be reused. 
-   - A web search on "download everquest rof" or "Getting Started on Addicted Dads" will yield some sources.
-     - Download responsibly. 
-     - Do your due diligence to ensure any downloaded files are safe. 
+   - Existing Rain of Fear client directories from a prior licensed Windows or Linux installation may be reused. 
 2. The EQAscendant patcher and game executables:
    - The EQAscendant project distributes the patcher as a ZIP archive. 
      - Obtain it from the project’s official Discord distribution location: 
      - https://discord.com/channels/1467192820610764871/1467195100961706074 
-3. Any locally stored copies you intend to reuse:
+3. Any licensed locally stored copies you intend to reuse:
    - Previously downloaded or installed EQAscendant patcher files may be reused. 
    - Previously downloaded or installed EverQuest client files may also be reused if they meet the required era (rof). 
 4. These assets are copied or installed into each Wine prefix during later steps. 
 
 **EQEmulator and login server accounts.** 
 
-1. EQAscendant (at the time of this writing) allows 3 clients out in the world killing stuff, and an additional client in the Bazaar selling your **Phat Lewts⚠️ **. For each EverQuest instance that you intend to run simultaneously you will need a login server account. To get login server accounts:
+1. EQAscendant (at the time of this writing) allows 3 clients out in the world killing stuff, and an additional client in the Bazaar selling your **Phat Lewts** ⚠️ . For each EverQuest instance that you intend to run simultaneously you will need a login server account. To get login server accounts:
    1. If you don't have one, create an EQEmulator account at:
       - https://www.eqemulator.org/
 
@@ -371,7 +368,7 @@ How to read the **Canonical directory tree** :
   - ~/Games/EQAscendant/eq4/drive_c/Program Files/eq4/
 
 - There is no shared Program Files/EverQuest directory. The one‑to‑one mapping (Unique Wine prefix ↔ matching EverQuest game folder) described above, lends itself to understanding your Wine/EverQuest directory structure. In technical benefits, it prevents cross‑contamination, makes boxing predictable, and ensures uninstalling a client is as simple as deleting its eqN/ directory. 
-- EQ-game-files/ is a staging folder created by the user, and is used to hold clean copies of the EverQuest game files and the EQAscendant patcher; its contents are copied into the EverQuest game folders during installs and ❌ **are never run directly**. This ensures the same known good source files are used for each of your EverQuest installs.
+- EQ-game-files/ is a staging folder created by the user, and is used to hold clean licensed copies of the EverQuest game files and the EQAscendant patcher; its contents are copied into the EverQuest game folders during installs and ❌ **are never run directly**. This ensures the same known good source files are used for each of your EverQuest installs.
 
 #### Using your own layout design 
 
